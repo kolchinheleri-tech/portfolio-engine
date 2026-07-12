@@ -1,22 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exhibition Space</title>
-  <link rel="stylesheet" href="/css/style.css">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Exhibition Space</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
 </head>
 
 <body>
-  <div id="viewer">
-    <div id="loading">Loading Exhibition Space...</div>
 
-    <div id="hud">
-      <div>Exhibition Space</div>
-      <small>Click / W / E / + / − / Ctrl+D</small>
+    <div id="viewer">
+
+        <div id="loading">
+            Loading Exhibition Space...
+        </div>
+
+        <div id="hud">
+
+            <div>
+                Exhibition Space
+            </div>
+
+            <small>
+                Click / W / E / + / − / Ctrl+D
+            </small>
+
+        </div>
+
+        <button
+            id="save-composition"
+            type="button"
+        >
+            Save Composition
+        </button>
+
+        <div
+            id="save-status"
+            aria-live="polite"
+        ></div>
+
     </div>
-  </div>
 
-  <script type="module" src="/js/main.js"></script>
+    <script
+        type="module"
+        src="/js/main.js"
+    ></script>
+
 </body>
+
 </html>
