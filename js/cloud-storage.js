@@ -10,7 +10,7 @@ export async function loadCloudComposition() {
   if (error) {
     /*
      * Kui rida puudub või ühendus ebaõnnestub,
-     * lubame rakendusel kasutada localStorage’it
+     * lubame rakendusel kasutada localStorage'it
      * või master-kompositsiooni.
      */
     console.warn(
@@ -51,4 +51,25 @@ export async function loadCompositionVersions() {
   }
 
   return Array.isArray(data) ? data : [];
+}
+
+export async function loadCompositionVersion(id) {
+  const { data, error } = await supabase
+    .from("exhibition_versions")
+    .select(
+      "id, state, version_type, created_at"
+    )
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(
+      "Composition version could not be loaded:",
+      error
+    );
+
+    throw error;
+  }
+
+  return data;
 }
