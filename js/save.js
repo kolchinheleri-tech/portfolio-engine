@@ -41,6 +41,32 @@ async function saveCompositionToCloud(composition) {
   }
 }
 
+async function saveCompositionVersion(composition) {
+  const { error } = await supabase
+    .from("exhibition_versions")
+    .insert({
+      state: composition,
+      version_type: "visitor_save"
+    });
+
+  if (error) {
+    throw error;
+  }
+}
+
+export async function saveInitialComposition(composition) {
+  const { error } = await supabase
+    .from("exhibition_versions")
+    .insert({
+      state: composition,
+      version_type: "initial"
+    });
+
+  if (error) {
+    throw error;
+  }
+}
+
 export function initSaveButton() {
   const button = document.getElementById(
     "save-composition"
@@ -71,8 +97,11 @@ export function initSaveButton() {
         orbit
       );
 
-      // Kogu kompositsioon Supabase’i
+      // Praegune aktiivne kompositsioon
       await saveCompositionToCloud(composition);
+
+      // Uus ajaloo versioon
+      await saveCompositionVersion(composition);
 
       console.log(
         "Full exhibition composition saved:",
