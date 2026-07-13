@@ -12,7 +12,10 @@
 
     <title>Exhibition Space</title>
 
-    <link rel="stylesheet" href="/css/style.css">
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
 
 </head>
 
@@ -36,17 +39,84 @@
 
         </div>
 
-        <button
-            id="save-composition"
-            type="button"
-        >
-            Save Composition
-        </button>
+        <div id="top-controls">
 
-        <div
-            id="save-status"
-            aria-live="polite"
-        ></div>
+            <button
+                id="toggle-version-history"
+                type="button"
+                aria-controls="version-history-panel"
+                aria-expanded="false"
+            >
+                History
+            </button>
+
+            <button
+                id="save-composition"
+                type="button"
+            >
+                Save Composition
+            </button>
+
+            <div
+                id="save-status"
+                aria-live="polite"
+            ></div>
+
+        </div>
+
+        <aside
+            id="version-history-panel"
+            data-open="false"
+            aria-hidden="true"
+            aria-label="Exhibition version history"
+        >
+
+            <header id="version-history-header">
+
+                <div>
+
+                    <div id="version-history-title">
+                        Version History
+                    </div>
+
+                    <div id="version-history-description">
+                        Saved exhibition compositions
+                    </div>
+
+                </div>
+
+                <button
+                    id="close-version-history"
+                    type="button"
+                    aria-label="Close version history"
+                >
+                    ×
+                </button>
+
+            </header>
+
+            <div id="version-history-actions">
+
+                <button
+                    id="refresh-version-history"
+                    type="button"
+                >
+                    Refresh
+                </button>
+
+            </div>
+
+            <div
+                id="version-preview-status"
+                aria-live="polite"
+            ></div>
+
+            <div
+                id="version-history-list"
+                aria-live="polite"
+            ></div>
+
+        </aside>
 
     </div>
 

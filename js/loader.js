@@ -1,7 +1,15 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { scene } from "./scene.js";
-import { loadComposition } from "./storage.js";
+import {
+  GLTFLoader
+} from "three/examples/jsm/loaders/GLTFLoader.js";
+
+import {
+  scene
+} from "./scene.js";
+
+import {
+  loadComposition
+} from "./storage.js";
 
 const loader = new GLTFLoader();
 
@@ -51,30 +59,80 @@ export const masterComposition = [
 ];
 
 function getMaster(file) {
-  return masterComposition.find((item) => item.file === file);
+  return masterComposition.find(
+    (item) => item.file === file
+  );
 }
 
 function isFiniteNumber(value) {
-  return typeof value === "number" && Number.isFinite(value);
+  return (
+    typeof value === "number" &&
+    Number.isFinite(value)
+  );
+}
+
+function removeCurrentObjects() {
+  objects.forEach((object) => {
+    scene.remove(object);
+
+    object.traverse((child) => {
+      if (!child.isMesh) {
+        return;
+      }
+
+      child.geometry?.dispose();
+
+      if (Array.isArray(child.material)) {
+        child.material.forEach((material) => {
+          material.dispose?.();
+        });
+      } else {
+        child.material?.dispose?.();
+      }
+    });
+  });
+
+  objects.length = 0;
 }
 
 export function addModelToScene(model, item) {
-  const initialBox = new THREE.Box3().setFromObject(model);
-  const center = initialBox.getCenter(new THREE.Vector3());
-  const size = initialBox.getSize(new THREE.Vector3());
+  const initialBox =
+    new THREE.Box3().setFromObject(model);
 
-  const maxDim = Math.max(size.x, size.y, size.z);
+  const center =
+    initialBox.getCenter(
+      new THREE.Vector3()
+    );
 
-  if (!Number.isFinite(maxDim) || maxDim <= 0) {
-    throw new Error(`Invalid model dimensions: ${item.file}`);
+  const size =
+    initialBox.getSize(
+      new THREE.Vector3()
+    );
+
+  const maxDim = Math.max(
+    size.x,
+    size.y,
+    size.z
+  );
+
+  if (
+    !Number.isFinite(maxDim) ||
+    maxDim <= 0
+  ) {
+    throw new Error(
+      `Invalid model dimensions: ${item.file}`
+    );
   }
 
   /*
-   * Nihutame mudeli geomeetria keskme root-objekti lokaalsesse nullpunkti.
-   * See ei muuda hiljem määratud maailmapositsiooni.
+   * Nihutame mudeli geomeetria keskme
+   * root-objekti lokaalsesse nullpunkti.
    */
   model.traverse((child) => {
-    if (child.isMesh && child.geometry) {
+    if (
+      child.isMesh &&
+      child.geometry
+    ) {
       child.geometry.translate(
         -center.x,
         -center.y,
@@ -83,22 +141,39 @@ export function addModelToScene(model, item) {
     }
   });
 
-  const master = getMaster(item.file) || item;
+  const master =
+    getMaster(item.file) || item;
 
   const baseScale =
     (1.2 / maxDim) *
     (master.scaleFactor || 1);
 
   model.position.set(
-    isFiniteNumber(item.x) ? item.x : 0,
-    isFiniteNumber(item.y) ? item.y : 0,
-    isFiniteNumber(item.z) ? item.z : 0
+    isFiniteNumber(item.x)
+      ? item.x
+      : 0,
+
+    isFiniteNumber(item.y)
+      ? item.y
+      : 0,
+
+    isFiniteNumber(item.z)
+      ? item.z
+      : 0
   );
 
   model.rotation.set(
-    isFiniteNumber(item.rx) ? item.rx : 0,
-    isFiniteNumber(item.ry) ? item.ry : 0,
-    isFiniteNumber(item.rz) ? item.rz : 0
+    isFiniteNumber(item.rx)
+      ? item.rx
+      : 0,
+
+    isFiniteNumber(item.ry)
+      ? item.ry
+      : 0,
+
+    isFiniteNumber(item.rz)
+      ? item.rz
+      : 0
   );
 
   if (
@@ -111,10 +186,16 @@ export function addModelToScene(model, item) {
       item.scaleY,
       item.scaleZ
     );
-  } else if (isFiniteNumber(item.scale)) {
-    model.scale.setScalar(item.scale);
+  } else if (
+    isFiniteNumber(item.scale)
+  ) {
+    model.scale.setScalar(
+      item.scale
+    );
   } else {
-    model.scale.setScalar(baseScale);
+    model.scale.setScalar(
+      baseScale
+    );
   }
 
   model.userData = {
@@ -128,7 +209,9 @@ export function addModelToScene(model, item) {
   };
 
   model.traverse((child) => {
-    if (!child.isMesh) return;
+    if (!child.isMesh) {
+      return;
+    }
 
     child.castShadow = false;
     child.receiveShadow = false;
@@ -141,7 +224,11 @@ export function addModelToScene(model, item) {
   return model;
 }
 
-export function loadSingleModel(item, onLoad, onError) {
+export function loadSingleModel(
+  item,
+  onLoad,
+  onError
+) {
   loader.load(
     item.file,
 
@@ -177,8 +264,11 @@ export function loadSingleModel(item, onLoad, onError) {
 }
 
 function convertSavedObject(item) {
-  const position = item.position || {};
-  const rotation = item.rotation || {};
+  const position =
+    item.position || {};
+
+  const rotation =
+    item.rotation || {};
 
   /*
    * Toetab nii uut:
@@ -239,28 +329,38 @@ function convertSavedObject(item) {
   };
 }
 
-export function loadModels(onComplete) {
-  objects.forEach((object) => {
-    scene.remove(object);
-  });
+/*
+ * compositionOverride võimaldab kuvada Supabase’ist
+ * valitud versiooni ilma localStorage’it muutmata.
+ */
+export function loadModels(
+  onComplete,
+  compositionOverride
+) {
+  removeCurrentObjects();
 
-  objects.length = 0;
+  const composition =
+    compositionOverride &&
+    typeof compositionOverride === "object"
+      ? compositionOverride
+      : loadComposition();
 
-  const saved = loadComposition();
-
-  const savedObjects = Array.isArray(saved?.objects)
-    ? saved.objects
-    : Array.isArray(saved)
-      ? saved
-      : null;
+  const savedObjects =
+    Array.isArray(composition?.objects)
+      ? composition.objects
+      : Array.isArray(composition)
+        ? composition
+        : null;
 
   const list =
     savedObjects?.length
-      ? savedObjects.map(convertSavedObject)
+      ? savedObjects.map(
+          convertSavedObject
+        )
       : masterComposition;
 
   if (list.length === 0) {
-    onComplete?.(saved);
+    onComplete?.(composition);
     return;
   }
 
@@ -269,8 +369,10 @@ export function loadModels(onComplete) {
   const finishOne = () => {
     finishedCount += 1;
 
-    if (finishedCount === list.length) {
-      onComplete?.(saved);
+    if (
+      finishedCount === list.length
+    ) {
+      onComplete?.(composition);
     }
   };
 
