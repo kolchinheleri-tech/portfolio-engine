@@ -30,3 +30,25 @@ export async function loadCloudComposition() {
 
   return data.composition;
 }
+
+export async function loadCompositionVersions() {
+  const { data, error } = await supabase
+    .from("exhibition_versions")
+    .select(
+      "id, version_type, created_at"
+    )
+    .order("created_at", {
+      ascending: false
+    });
+
+  if (error) {
+    console.error(
+      "Composition versions could not be loaded:",
+      error
+    );
+
+    throw error;
+  }
+
+  return Array.isArray(data) ? data : [];
+}
