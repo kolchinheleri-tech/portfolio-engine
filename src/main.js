@@ -4,6 +4,14 @@ import {
 } from "./core/viewer.js";
 
 import {
+  camera
+} from "./core/scene.js";
+
+import {
+  orbit
+} from "./core/viewer.js";
+
+import {
   loadModels,
   objects
 } from "./models/loader.js";
@@ -16,10 +24,35 @@ import {
   initTransformControls
 } from "./editor/transform.js";
 
+import {
+  createProject,
+  getActiveProject,
+  restoreActiveProject
+} from "./projects/manager.js";
+
 async function initializeApplication() {
   startViewer();
 
-  await loadModels();
+  const savedComposition =
+    restoreActiveProject();
+
+  if (!getActiveProject()) {
+    createProject({
+      title: "Flux and Form",
+      slug: "flux-and-form",
+      description:
+        "Interactive sculptural exhibition."
+    });
+  }
+
+  const compositionObjects =
+    savedComposition?.objects;
+
+  await loadModels(
+    Array.isArray(compositionObjects)
+      ? compositionObjects
+      : undefined
+  );
 
   frameObjects(objects);
 
@@ -34,8 +67,17 @@ async function initializeApplication() {
   }
 
   console.log(
+    "Active exhibition project:",
+    getActiveProject()
+  );
+
+  console.log(
     "Exhibition Space v2 initialized:",
-    objects
+    {
+      objects,
+      camera,
+      orbit
+    }
   );
 }
 
