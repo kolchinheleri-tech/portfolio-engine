@@ -1,4 +1,5 @@
 import * as THREE from "three";
+
 import {
   GLTFLoader
 } from "three/examples/jsm/loaders/GLTFLoader.js";
@@ -10,6 +11,10 @@ import {
 import {
   loadComposition
 } from "./storage.js";
+
+import {
+  loadCloudComposition
+} from "./cloud-storage.js";
 
 const loader = new GLTFLoader();
 
@@ -270,13 +275,6 @@ function convertSavedObject(item) {
   const rotation =
     item.rotation || {};
 
-  /*
-   * Toetab nii uut:
-   * scale: { x, y, z }
-   *
-   * kui vana:
-   * scale: 0.8
-   */
   const scaleObject =
     item.scale &&
     typeof item.scale === "object"
@@ -329,21 +327,61 @@ function convertSavedObject(item) {
   };
 }
 
-/*
- * compositionOverride võimaldab kuvada Supabase’ist
- * valitud versiooni ilma localStorage’it muutmata.
- */
-export function loadModels(
+async function getStartupComposition(
+  compositionOverride
+) {
+  /*
+   * Preview kasutab alati etteantud versiooni
+   * ega kirjuta localStorage’it või pilve üle.
+   */
+  if (
+    compositionOverride &&
+    typeof compositionOverride === "object"
+  ) {
+    return compositionOverride;
+  }
+
+  /*
+   * Tavalise käivitamise ajal proovime esimesena
+   * laadida kõigi külastajate ühise viimase versiooni.
+   */
+  const cloudComposition =
+    await loadCloudComposition();
+
+  if (
+    cloudComposition &&
+    typeof cloudComposition === "object"
+  ) {
+    return cloudComposition;
+  }
+
+  /*
+   * Kui Supabase ei ole kättesaadav, kasutame
+   * selle brauseri kohalikku varukoopiat.
+   */
+  const localComposition =
+    loadComposition();
+
+  if (
+    localComposition &&
+    typeof localComposition === "object"
+  ) {
+    return localComposition;
+  }
+
+  return null;
+}
+
+export async function loadModels(
   onComplete,
   compositionOverride
 ) {
   removeCurrentObjects();
 
   const composition =
-    compositionOverride &&
-    typeof compositionOverride === "object"
-      ? compositionOverride
-      : loadComposition();
+    await getStartupComposition(
+      compositionOverride
+    );
 
   const savedObjects =
     Array.isArray(composition?.objects)
