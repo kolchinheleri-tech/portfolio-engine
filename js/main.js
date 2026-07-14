@@ -22,6 +22,66 @@ import {
   initVersionHistory
 } from "./version-history.js";
 
+function isAdminMode() {
+  const parameters =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  return parameters.get("admin") === "1";
+}
+
+function configureAdminInterface() {
+  const adminMode =
+    isAdminMode();
+
+  const historyButton =
+    document.getElementById(
+      "toggle-version-history"
+    );
+
+  const historyPanel =
+    document.getElementById(
+      "version-history-panel"
+    );
+
+  if (!adminMode) {
+    if (historyButton) {
+      historyButton.hidden = true;
+    }
+
+    if (historyPanel) {
+      historyPanel.hidden = true;
+      historyPanel.dataset.open = "false";
+
+      historyPanel.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+    }
+
+    console.log(
+      "Exhibition opened in visitor mode."
+    );
+
+    return;
+  }
+
+  if (historyButton) {
+    historyButton.hidden = false;
+  }
+
+  if (historyPanel) {
+    historyPanel.hidden = false;
+  }
+
+  initVersionHistory();
+
+  console.log(
+    "Exhibition opened in admin mode."
+  );
+}
+
 startViewer();
 
 loadModels((savedComposition) => {
@@ -44,14 +104,19 @@ loadModels((savedComposition) => {
       savedCamera.target.z
     );
 
-    camera.lookAt(orbit.target);
+    camera.lookAt(
+      orbit.target
+    );
+
     orbit.update();
   } else {
     frameObjects();
   }
 
   const loading =
-    document.getElementById("loading");
+    document.getElementById(
+      "loading"
+    );
 
   if (loading) {
     loading.style.display = "none";
@@ -59,4 +124,4 @@ loadModels((savedComposition) => {
 });
 
 initSaveButton();
-initVersionHistory();
+configureAdminInterface();
