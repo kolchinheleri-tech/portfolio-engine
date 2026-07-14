@@ -1,16 +1,13 @@
 import {
   loadCompositionVersions,
-  loadCompositionVersion
+  loadCompositionVersion,
+  restoreCloudComposition
 } from "./cloud-storage.js";
 
 import {
   loadModels,
   objects
 } from "./loader.js";
-
-import {
-  camera
-} from "./scene.js";
 
 import {
   orbit,
@@ -56,38 +53,18 @@ function formatDate(dateString) {
   ).format(date);
 }
 
-function applyCompositionCamera(
-  composition
-) {
-  const savedCamera =
-    composition?.camera;
-
-  if (
-    savedCamera?.position &&
-    savedCamera?.target
-  ) {
-    camera.position.set(
-      savedCamera.position.x,
-      savedCamera.position.y,
-      savedCamera.position.z
-    );
-
-    orbit.target.set(
-      savedCamera.target.x,
-      savedCamera.target.y,
-      savedCamera.target.z
-    );
-
-    camera.lookAt(
-      orbit.target
-    );
-
-    orbit.update();
-
-    return;
-  }
+function applyCompositionCamera() {
+  /*
+   * Preview ja Restore taastavad objektide paigutuse,
+   * kuid ei kasuta versiooni sisse salvestatud
+   * kaamera asukohta.
+   *
+   * Nii saab iga kompositsioon automaatselt
+   * ühtlase ja sobiva kadreeringu.
+   */
 
   frameObjects(objects);
+  orbit.update();
 }
 
 function setPreviewStatus(
@@ -108,6 +85,61 @@ function setPreviewStatus(
     String(isError);
 }
 
+function markPreviewingVersion(
+  versionId
+) {
+  document
+    .querySelectorAll(
+      ".version-history-item"
+    )
+    .forEach((item) => {
+      item.dataset.previewing =
+        String(
+          item.dataset.versionId ===
+          String(versionId)
+        );
+    });
+}
+
+async function loadVersionComposition(
+  versionId
+) {
+  const selectedVersion =
+    await loadCompositionVersion(
+      versionId
+    );
+
+  const composition =
+    selectedVersion?.state;
+
+  if (
+    !composition ||
+    typeof composition !== "object"
+  ) {
+    throw new Error(
+      "The selected version has no valid composition."
+    );
+  }
+
+  return {
+    selectedVersion,
+    composition
+  };
+}
+
+function displayComposition(
+  composition,
+  onComplete
+) {
+  loadModels(
+    () => {
+      applyCompositionCamera();
+      onComplete?.();
+    },
+    composition
+  );
+}
+
 async function previewVersion(
   version,
   button
@@ -119,47 +151,19 @@ async function previewVersion(
   );
 
   try {
-    const selectedVersion =
-      await loadCompositionVersion(
-        version.id
-      );
+    const {
+      selectedVersion,
+      composition
+    } = await loadVersionComposition(
+      version.id
+    );
 
-    const composition =
-      selectedVersion?.state;
-
-    if (
-      !composition ||
-      typeof composition !== "object"
-    ) {
-      throw new Error(
-        "The selected version has no valid composition."
-      );
-    }
-
-    loadModels(
+    displayComposition(
+      composition,
       () => {
-        applyCompositionCamera(
-          composition
+        markPreviewingVersion(
+          version.id
         );
-
-        document
-          .querySelectorAll(
-            ".version-history-item"
-          )
-          .forEach((item) => {
-            item.dataset.previewing =
-              "false";
-          });
-
-        const item =
-          button.closest(
-            ".version-history-item"
-          );
-
-        if (item) {
-          item.dataset.previewing =
-            "true";
-        }
 
         setPreviewStatus(
           `Previewing version #${version.id}. ` +
@@ -173,8 +177,7 @@ async function previewVersion(
             objects
           }
         );
-      },
-      composition
+      }
     );
   } catch (error) {
     console.error(
@@ -184,6 +187,74 @@ async function previewVersion(
 
     setPreviewStatus(
       "Preview failed — check Console.",
+      true
+    );
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function restoreVersion(
+  version,
+  button
+) {
+  const confirmed = window.confirm(
+    `Restore version #${version.id}?\n\n` +
+    "This will become the active exhibition " +
+    "for all visitors."
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  button.disabled = true;
+
+  setPreviewStatus(
+    `Restoring version #${version.id}…`
+  );
+
+  try {
+    const {
+      composition
+    } = await loadVersionComposition(
+      version.id
+    );
+
+    const restoredVersion =
+      await restoreCloudComposition(
+        composition
+      );
+
+    displayComposition(
+      composition,
+      async () => {
+        setPreviewStatus(
+          `Version #${version.id} restored successfully. ` +
+          `New history version: #${restoredVersion.id}.`
+        );
+
+        console.log(
+          "Exhibition version restored:",
+          {
+            sourceVersionId:
+              version.id,
+
+            restoredVersion
+          }
+        );
+
+        await refreshVersionHistory();
+      }
+    );
+  } catch (error) {
+    console.error(
+      "Version restore failed:",
+      error
+    );
+
+    setPreviewStatus(
+      "Restore failed — check Console.",
       true
     );
   } finally {
@@ -294,8 +365,33 @@ function createVersionElement(
     }
   );
 
+  const restoreButton =
+    document.createElement(
+      "button"
+    );
+
+  restoreButton.type =
+    "button";
+
+  restoreButton.className =
+    "version-preview-button";
+
+  restoreButton.textContent =
+    "Restore";
+
+  restoreButton.addEventListener(
+    "click",
+    () => {
+      restoreVersion(
+        version,
+        restoreButton
+      );
+    }
+  );
+
   actions.append(
-    previewButton
+    previewButton,
+    restoreButton
   );
 
   item.append(
@@ -350,8 +446,6 @@ async function refreshVersionHistory() {
   if (refreshButton) {
     refreshButton.disabled = true;
   }
-
-  setPreviewStatus("");
 
   renderMessage(
     list,
