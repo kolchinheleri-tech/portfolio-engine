@@ -18,10 +18,15 @@ import {
   initSaveButton
 } from "./save.js";
 
+import {
+  initVersionHistory
+} from "./version-history.js";
+
 startViewer();
 
 loadModels((savedComposition) => {
-  const savedCamera = savedComposition?.camera;
+  const savedCamera =
+    savedComposition?.camera;
 
   if (
     savedCamera?.position &&
@@ -54,3 +59,4 @@ loadModels((savedComposition) => {
 });
 
 initSaveButton();
+initVersionHistory();

@@ -10,7 +10,7 @@ export async function loadCloudComposition() {
   if (error) {
     /*
      * Kui rida puudub või ühendus ebaõnnestub,
-     * lubame rakendusel kasutada localStorage'it
+     * lubame rakendusel kasutada localStorage’it
      * või master-kompositsiooni.
      */
     console.warn(
@@ -72,4 +72,69 @@ export async function loadCompositionVersion(id) {
   }
 
   return data;
+}
+
+export async function restoreCloudComposition(
+  composition
+) {
+  if (
+    !composition ||
+    typeof composition !== "object"
+  ) {
+    throw new Error(
+      "A valid composition is required for restore."
+    );
+  }
+
+  const restoredAt =
+    new Date().toISOString();
+
+  const {
+    error: activeStateError
+  } = await supabase
+    .from("exhibition_state")
+    .upsert(
+      {
+        id: "latest",
+        composition,
+        updated_at: restoredAt
+      },
+      {
+        onConflict: "id"
+      }
+    );
+
+  if (activeStateError) {
+    console.error(
+      "Active exhibition could not be restored:",
+      activeStateError
+    );
+
+    throw activeStateError;
+  }
+
+  const {
+    data: restoredVersion,
+    error: versionError
+  } = await supabase
+    .from("exhibition_versions")
+    .insert({
+      state: composition,
+      version_type: "restore"
+    })
+    .select(
+      "id, version_type, created_at"
+    )
+    .single();
+
+  if (versionError) {
+    console.error(
+      "Restored version could not be added to history:",
+      versionError
+    );
+
+    throw versionError;
+  }
+
+  return restoredVersion;
 }
