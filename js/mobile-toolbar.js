@@ -3,7 +3,10 @@ import {
   duplicateSelected,
   getSelectionCount,
   scaleSelected,
-  undoLastChange
+  undoLastChange,
+  toggleMultiSelectMode,
+  hideSelected,
+  showAllObjects
 } from "./transform.js";
 
 function setToolbarStatus(
@@ -19,7 +22,8 @@ function setToolbarStatus(
     return;
   }
 
-  status.textContent = message;
+  status.textContent =
+    message;
 
   status.dataset.error =
     String(isError);
@@ -33,15 +37,39 @@ function setActiveTool(mode) {
     .forEach((button) => {
       button.dataset.active =
         String(
-          button.dataset.tool === mode
+          button.dataset.tool ===
+          mode
         );
     });
+}
+
+function setMultiButtonState(
+  active
+) {
+  const button =
+    document.getElementById(
+      "mobile-multi"
+    );
+
+  if (!button) {
+    return;
+  }
+
+  button.dataset.active =
+    String(active);
+
+  button.setAttribute(
+    "aria-pressed",
+    String(active)
+  );
 }
 
 function requireSelection(
   message
 ) {
-  if (getSelectionCount() > 0) {
+  if (
+    getSelectionCount() > 0
+  ) {
     return true;
   }
 
@@ -83,6 +111,21 @@ export function initMobileToolbar() {
       "mobile-undo"
     );
 
+  const multiButton =
+    document.getElementById(
+      "mobile-multi"
+    );
+
+  const hideButton =
+    document.getElementById(
+      "mobile-hide"
+    );
+
+  const showButton =
+    document.getElementById(
+      "mobile-show"
+    );
+
   const duplicateButton =
     document.getElementById(
       "mobile-duplicate"
@@ -98,34 +141,38 @@ export function initMobileToolbar() {
       "save-composition"
     );
 
-  toolButtons.forEach((button) => {
-    button.addEventListener(
-      "click",
-      () => {
-        const mode =
-          button.dataset.tool;
+  toolButtons.forEach(
+    (button) => {
+      button.addEventListener(
+        "click",
 
-        setTransformMode(mode);
-        setActiveTool(mode);
+        () => {
+          const mode =
+            button.dataset.tool;
 
-        const labels = {
-          translate:
-            "Move tool active",
+          setTransformMode(mode);
+          setActiveTool(mode);
 
-          rotate:
-            "Rotate tool active"
-        };
+          const labels = {
+            translate:
+              "Move tool active",
 
-        setToolbarStatus(
-          labels[mode] ||
-          "Tool selected"
-        );
-      }
-    );
-  });
+            rotate:
+              "Rotate tool active"
+          };
+
+          setToolbarStatus(
+            labels[mode] ||
+            "Tool selected"
+          );
+        }
+      );
+    }
+  );
 
   scaleUpButton?.addEventListener(
     "click",
+
     () => {
       if (
         !requireSelection(
@@ -138,13 +185,14 @@ export function initMobileToolbar() {
       scaleSelected(1.08);
 
       setToolbarStatus(
-        "Object enlarged"
+        "Selection enlarged"
       );
     }
   );
 
   scaleDownButton?.addEventListener(
     "click",
+
     () => {
       if (
         !requireSelection(
@@ -157,13 +205,14 @@ export function initMobileToolbar() {
       scaleSelected(0.92);
 
       setToolbarStatus(
-        "Object reduced"
+        "Selection reduced"
       );
     }
   );
 
   undoButton?.addEventListener(
     "click",
+
     () => {
       const undone =
         undoLastChange();
@@ -183,8 +232,76 @@ export function initMobileToolbar() {
     }
   );
 
+  multiButton?.addEventListener(
+    "click",
+
+    () => {
+      const active =
+        toggleMultiSelectMode();
+
+      setMultiButtonState(
+        active
+      );
+
+      if (active) {
+        setToolbarStatus(
+          "Multi-select active — tap several objects"
+        );
+      } else {
+        setToolbarStatus(
+          "Multi-select off"
+        );
+      }
+    }
+  );
+
+  hideButton?.addEventListener(
+    "click",
+
+    () => {
+      if (
+        !requireSelection(
+          "Select one or more objects to hide"
+        )
+      ) {
+        return;
+      }
+
+      const hidden =
+        hideSelected();
+
+      if (hidden) {
+        setToolbarStatus(
+          "Selected objects hidden"
+        );
+      }
+    }
+  );
+
+  showButton?.addEventListener(
+    "click",
+
+    () => {
+      const shown =
+        showAllObjects();
+
+      if (!shown) {
+        setToolbarStatus(
+          "All objects are already visible"
+        );
+
+        return;
+      }
+
+      setToolbarStatus(
+        "All objects shown"
+      );
+    }
+  );
+
   duplicateButton?.addEventListener(
     "click",
+
     () => {
       if (
         !requireSelection(
@@ -199,7 +316,7 @@ export function initMobileToolbar() {
 
       if (duplicated) {
         setToolbarStatus(
-          "Object duplicated"
+          "Selection duplicated"
         );
       }
     }
@@ -207,6 +324,7 @@ export function initMobileToolbar() {
 
   mobileSaveButton?.addEventListener(
     "click",
+
     () => {
       if (!desktopSaveButton) {
         setToolbarStatus(
@@ -227,13 +345,22 @@ export function initMobileToolbar() {
 
   window.addEventListener(
     "exhibition-selection-change",
+
     (event) => {
       const count =
         event.detail?.count || 0;
 
+      const multiActive =
+        Boolean(
+          event.detail
+            ?.multiSelectMode
+        );
+
       if (count === 0) {
         setToolbarStatus(
-          "Tap an object to begin"
+          multiActive
+            ? "Multi-select active — tap objects"
+            : "Tap an object to begin"
         );
 
         return;
@@ -241,7 +368,9 @@ export function initMobileToolbar() {
 
       if (count === 1) {
         setToolbarStatus(
-          "Object selected"
+          multiActive
+            ? "1 object selected — tap more"
+            : "Object selected"
         );
 
         return;
@@ -255,6 +384,7 @@ export function initMobileToolbar() {
 
   window.addEventListener(
     "exhibition-transform-mode-change",
+
     (event) => {
       const mode =
         event.detail?.mode;
@@ -268,7 +398,18 @@ export function initMobileToolbar() {
     }
   );
 
-  setActiveTool(
-    "translate"
+  window.addEventListener(
+    "exhibition-multi-select-change",
+
+    (event) => {
+      setMultiButtonState(
+        Boolean(
+          event.detail?.active
+        )
+      );
+    }
   );
+
+  setActiveTool("translate");
+  setMultiButtonState(false);
 }

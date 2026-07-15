@@ -1,9 +1,15 @@
-const LOCAL_KEY = "exhibitionCompositionV1";
+const LOCAL_KEY =
+  "exhibitionCompositionV1";
 
-export function serializeComposition(objects, camera, orbit) {
+export function serializeComposition(
+  objects,
+  camera,
+  orbit
+) {
   return {
     version: 1,
-    savedAt: new Date().toISOString(),
+    savedAt:
+      new Date().toISOString(),
 
     camera: {
       position: {
@@ -11,6 +17,7 @@ export function serializeComposition(objects, camera, orbit) {
         y: camera.position.y,
         z: camera.position.z
       },
+
       target: {
         x: orbit.target.x,
         y: orbit.target.y,
@@ -18,34 +25,55 @@ export function serializeComposition(objects, camera, orbit) {
       }
     },
 
-    objects: objects.map((object) => ({
-      id: object.userData.id,
-      file: object.userData.file,
-      isCopy: Boolean(object.userData.isCopy),
+    objects: objects.map(
+      (object) => ({
+        id:
+          object.userData.id,
 
-      position: {
-        x: object.position.x,
-        y: object.position.y,
-        z: object.position.z
-      },
+        file:
+          object.userData.file,
 
-      rotation: {
-        x: object.rotation.x,
-        y: object.rotation.y,
-        z: object.rotation.z
-      },
+        isCopy:
+          Boolean(
+            object.userData.isCopy
+          ),
 
-      scale: {
-        x: object.scale.x,
-        y: object.scale.y,
-        z: object.scale.z
-      }
-    }))
+        visible:
+          object.visible !== false,
+
+        position: {
+          x: object.position.x,
+          y: object.position.y,
+          z: object.position.z
+        },
+
+        rotation: {
+          x: object.rotation.x,
+          y: object.rotation.y,
+          z: object.rotation.z
+        },
+
+        scale: {
+          x: object.scale.x,
+          y: object.scale.y,
+          z: object.scale.z
+        }
+      })
+    )
   };
 }
 
-export function saveComposition(objects, camera, orbit) {
-  const composition = serializeComposition(objects, camera, orbit);
+export function saveComposition(
+  objects,
+  camera,
+  orbit
+) {
+  const composition =
+    serializeComposition(
+      objects,
+      camera,
+      orbit
+    );
 
   localStorage.setItem(
     LOCAL_KEY,
@@ -56,18 +84,29 @@ export function saveComposition(objects, camera, orbit) {
 }
 
 export function loadComposition() {
-  const saved = localStorage.getItem(LOCAL_KEY);
+  const saved =
+    localStorage.getItem(
+      LOCAL_KEY
+    );
 
-  if (!saved) return null;
+  if (!saved) {
+    return null;
+  }
 
   try {
     return JSON.parse(saved);
   } catch (error) {
-    console.error("Composition could not be read:", error);
+    console.error(
+      "Composition could not be read:",
+      error
+    );
+
     return null;
   }
 }
 
 export function clearComposition() {
-  localStorage.removeItem(LOCAL_KEY);
+  localStorage.removeItem(
+    LOCAL_KEY
+  );
 }

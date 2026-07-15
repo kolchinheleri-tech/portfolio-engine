@@ -40,7 +40,8 @@ canvas {
 
     opacity: 1;
 
-    transition: opacity .35s ease;
+    transition:
+        opacity .35s ease;
 
     touch-action: none;
 
@@ -62,7 +63,8 @@ canvas {
     font-family: monospace;
     font-size: 12px;
 
-    color: rgba(255, 0, 0, .75);
+    color:
+        rgba(255, 0, 0, .75);
 
     pointer-events: none;
 
@@ -80,7 +82,8 @@ canvas {
     font-family: monospace;
     font-size: 12px;
 
-    color: rgba(255, 0, 0, .75);
+    color:
+        rgba(255, 0, 0, .75);
 
     pointer-events: none;
 
@@ -115,6 +118,7 @@ canvas {
 
     display: flex;
     align-items: flex-start;
+
     gap: 8px;
 
     z-index: 200;
@@ -129,12 +133,14 @@ canvas {
     padding: 10px 16px;
 
     border:
-        1px solid rgba(255, 0, 0, .45);
+        1px solid
+        rgba(255, 0, 0, .45);
 
     background:
         rgba(255, 255, 255, .92);
 
-    color: rgb(180, 0, 0);
+    color:
+        rgb(180, 0, 0);
 
     font-family: monospace;
     font-size: 12px;
@@ -180,7 +186,8 @@ canvas {
     font-size: 11px;
     text-align: right;
 
-    color: rgba(255, 0, 0, .8);
+    color:
+        rgba(255, 0, 0, .8);
 
     pointer-events: none;
 
@@ -208,7 +215,9 @@ canvas {
 
     box-sizing: border-box;
 
-    width: min(360px, 100vw);
+    width:
+        min(360px, 100vw);
+
     height: 100%;
 
     padding: 24px;
@@ -217,19 +226,24 @@ canvas {
         rgba(255, 255, 255, .96);
 
     border-left:
-        1px solid rgba(255, 0, 0, .25);
+        1px solid
+        rgba(255, 0, 0, .25);
 
     box-shadow:
-        -12px 0 30px rgba(0, 0, 0, .08);
+        -12px 0 30px
+        rgba(0, 0, 0, .08);
 
     font-family: monospace;
-    color: rgb(150, 0, 0);
+
+    color:
+        rgb(150, 0, 0);
 
     overflow-y: auto;
 
     z-index: 300;
 
-    transform: translateX(100%);
+    transform:
+        translateX(100%);
 
     transition:
         transform .25s ease;
@@ -238,13 +252,15 @@ canvas {
 
 #version-history-panel[data-open="true"] {
 
-    transform: translateX(0);
+    transform:
+        translateX(0);
 
 }
 
 #version-history-header {
 
     display: flex;
+
     align-items: flex-start;
     justify-content: space-between;
 
@@ -253,7 +269,8 @@ canvas {
     padding-bottom: 16px;
 
     border-bottom:
-        1px solid rgba(255, 0, 0, .2);
+        1px solid
+        rgba(255, 0, 0, .2);
 
 }
 
@@ -282,11 +299,13 @@ canvas {
     padding: 0;
 
     border:
-        1px solid rgba(255, 0, 0, .3);
+        1px solid
+        rgba(255, 0, 0, .3);
 
     background: transparent;
 
-    color: rgb(180, 0, 0);
+    color:
+        rgb(180, 0, 0);
 
     font-family: monospace;
     font-size: 20px;
@@ -306,6 +325,7 @@ canvas {
 #version-history-actions {
 
     display: flex;
+
     justify-content: flex-end;
 
     padding: 16px 0;
@@ -344,6 +364,7 @@ canvas {
 #version-history-list {
 
     display: flex;
+
     flex-direction: column;
 
 }
@@ -351,6 +372,7 @@ canvas {
 .version-history-item {
 
     display: flex;
+
     align-items: flex-start;
     justify-content: space-between;
 
@@ -359,7 +381,8 @@ canvas {
     padding: 14px 8px;
 
     border-top:
-        1px solid rgba(255, 0, 0, .12);
+        1px solid
+        rgba(255, 0, 0, .12);
 
     transition:
         background .2s ease;
@@ -455,7 +478,8 @@ button {
 button:focus-visible {
 
     outline:
-        1px solid rgba(255, 0, 0, .8);
+        1px solid
+        rgba(255, 0, 0, .8);
 
     outline-offset: 2px;
 
@@ -472,10 +496,13 @@ button:focus-visible {
     #hud {
 
         right: 12px;
+
         bottom:
             calc(
-                142px +
-                env(safe-area-inset-bottom)
+                126px +
+                env(
+                    safe-area-inset-bottom
+                )
             );
 
         max-width: 190px;
@@ -501,10 +528,13 @@ button:focus-visible {
     #loading {
 
         left: 12px;
+
         bottom:
             calc(
-                142px +
-                env(safe-area-inset-bottom)
+                126px +
+                env(
+                    safe-area-inset-bottom
+                )
             );
 
         font-size: 10px;
@@ -515,30 +545,42 @@ button:focus-visible {
 
         position: fixed;
 
-        left: 8px;
-        right: 8px;
+        left: 6px;
+        right: 6px;
+
         bottom:
             calc(
-                8px +
-                env(safe-area-inset-bottom)
+                6px +
+                env(
+                    safe-area-inset-bottom
+                )
             );
 
         display: grid;
 
         grid-template-columns:
-            repeat(4, minmax(0, 1fr));
+            repeat(
+                5,
+                minmax(0, 1fr)
+            );
 
-        gap: 5px;
+        gap: 3px;
 
-        padding: 6px;
+        padding: 4px;
 
         box-sizing: border-box;
 
         background:
-            rgba(255, 255, 255, .96);
+            rgba(
+                255,
+                255,
+                255,
+                .96
+            );
 
         border:
-            1px solid rgba(255, 0, 0, .3);
+            1px solid
+            rgba(255, 0, 0, .3);
 
         z-index: 500;
 
@@ -549,19 +591,29 @@ button:focus-visible {
     .mobile-tool-button {
 
         min-width: 0;
-        min-height: 44px;
+        min-height: 42px;
 
-        padding: 8px 4px;
+        padding: 5px 1px;
+
+        overflow: hidden;
 
         border:
-            1px solid rgba(255, 0, 0, .35);
+            1px solid
+            rgba(255, 0, 0, .35);
 
         background: transparent;
 
-        color: rgb(180, 0, 0);
+        color:
+            rgb(180, 0, 0);
 
         font-family: monospace;
-        font-size: 10px;
+        font-size: 8px;
+
+        line-height: 1.1;
+
+        white-space: nowrap;
+
+        text-overflow: clip;
 
         cursor: pointer;
 
@@ -575,14 +627,16 @@ button:focus-visible {
             rgba(255, 0, 0, .1);
 
         border-color:
-            rgba(255, 0, 0, .8);
+            rgba(255, 0, 0, .85);
+
+        font-weight: 700;
 
     }
 
     .mobile-save-button {
 
         background:
-            rgba(255, 0, 0, .06);
+            rgba(255, 0, 0, .07);
 
         font-weight: 700;
 
@@ -592,21 +646,29 @@ button:focus-visible {
 
         position: fixed;
 
-        left: 12px;
+        left: 10px;
+
         bottom:
             calc(
-                116px +
-                env(safe-area-inset-bottom)
+                100px +
+                env(
+                    safe-area-inset-bottom
+                )
             );
 
         display: block;
 
-        max-width: 220px;
+        max-width: 240px;
 
         padding: 5px 8px;
 
         background:
-            rgba(255, 255, 255, .88);
+            rgba(
+                255,
+                255,
+                255,
+                .9
+            );
 
         color:
             rgba(180, 0, 0, .8);

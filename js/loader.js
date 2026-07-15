@@ -16,7 +16,8 @@ import {
   loadCloudComposition
 } from "./cloud-storage.js";
 
-const loader = new GLTFLoader();
+const loader =
+  new GLTFLoader();
 
 export const objects = [];
 
@@ -27,7 +28,8 @@ export const masterComposition = [
     x: -4,
     y: 0,
     z: 0,
-    scaleFactor: 1.15
+    scaleFactor: 1.15,
+    visible: true
   },
   {
     id: "obj-2",
@@ -35,7 +37,8 @@ export const masterComposition = [
     x: -2,
     y: 0,
     z: 0.2,
-    scaleFactor: 0.85
+    scaleFactor: 0.85,
+    visible: true
   },
   {
     id: "obj-3",
@@ -43,7 +46,8 @@ export const masterComposition = [
     x: 0,
     y: 0,
     z: -0.2,
-    scaleFactor: 1
+    scaleFactor: 1,
+    visible: true
   },
   {
     id: "obj-4",
@@ -51,7 +55,8 @@ export const masterComposition = [
     x: 2,
     y: 0,
     z: 0.2,
-    scaleFactor: 1.25
+    scaleFactor: 1.25,
+    visible: true
   },
   {
     id: "obj-5",
@@ -59,13 +64,15 @@ export const masterComposition = [
     x: 4,
     y: 0,
     z: -0.1,
-    scaleFactor: 0.95
+    scaleFactor: 0.95,
+    visible: true
   }
 ];
 
 function getMaster(file) {
   return masterComposition.find(
-    (item) => item.file === file
+    (item) =>
+      item.file === file
   );
 }
 
@@ -76,33 +83,46 @@ function isFiniteNumber(value) {
   );
 }
 
+function disposeObject(object) {
+  object.traverse((child) => {
+    if (!child.isMesh) {
+      return;
+    }
+
+    child.geometry?.dispose();
+
+    if (
+      Array.isArray(
+        child.material
+      )
+    ) {
+      child.material.forEach(
+        (material) => {
+          material.dispose?.();
+        }
+      );
+    } else {
+      child.material?.dispose?.();
+    }
+  });
+}
+
 function removeCurrentObjects() {
   objects.forEach((object) => {
     scene.remove(object);
-
-    object.traverse((child) => {
-      if (!child.isMesh) {
-        return;
-      }
-
-      child.geometry?.dispose();
-
-      if (Array.isArray(child.material)) {
-        child.material.forEach((material) => {
-          material.dispose?.();
-        });
-      } else {
-        child.material?.dispose?.();
-      }
-    });
+    disposeObject(object);
   });
 
   objects.length = 0;
 }
 
-export function addModelToScene(model, item) {
+export function addModelToScene(
+  model,
+  item
+) {
   const initialBox =
-    new THREE.Box3().setFromObject(model);
+    new THREE.Box3()
+      .setFromObject(model);
 
   const center =
     initialBox.getCenter(
@@ -114,11 +134,12 @@ export function addModelToScene(model, item) {
       new THREE.Vector3()
     );
 
-  const maxDim = Math.max(
-    size.x,
-    size.y,
-    size.z
-  );
+  const maxDim =
+    Math.max(
+      size.x,
+      size.y,
+      size.z
+    );
 
   if (
     !Number.isFinite(maxDim) ||
@@ -129,10 +150,6 @@ export function addModelToScene(model, item) {
     );
   }
 
-  /*
-   * Nihutame mudeli geomeetria keskme
-   * root-objekti lokaalsesse nullpunkti.
-   */
   model.traverse((child) => {
     if (
       child.isMesh &&
@@ -147,7 +164,8 @@ export function addModelToScene(model, item) {
   });
 
   const master =
-    getMaster(item.file) || item;
+    getMaster(item.file) ||
+    item;
 
   const baseScale =
     (1.2 / maxDim) *
@@ -203,13 +221,20 @@ export function addModelToScene(model, item) {
     );
   }
 
+  model.visible =
+    item.visible !== false;
+
   model.userData = {
     id:
       item.id ||
       `obj-${Date.now()}-${Math.random()}`,
 
-    file: item.file,
-    isCopy: Boolean(item.isCopy),
+    file:
+      item.file,
+
+    isCopy:
+      Boolean(item.isCopy),
+
     baseScale
   };
 
@@ -239,10 +264,11 @@ export function loadSingleModel(
 
     (gltf) => {
       try {
-        const model = addModelToScene(
-          gltf.scene,
-          item
-        );
+        const model =
+          addModelToScene(
+            gltf.scene,
+            item
+          );
 
         onLoad?.(model);
       } catch (error) {
@@ -284,7 +310,12 @@ function convertSavedObject(item) {
   return {
     id: item.id,
     file: item.file,
-    isCopy: Boolean(item.isCopy),
+
+    isCopy:
+      Boolean(item.isCopy),
+
+    visible:
+      item.visible !== false,
 
     x:
       isFiniteNumber(position.x)
@@ -316,9 +347,26 @@ function convertSavedObject(item) {
         ? rotation.z
         : item.rz,
 
-    scaleX: scaleObject?.x,
-    scaleY: scaleObject?.y,
-    scaleZ: scaleObject?.z,
+    scaleX:
+      isFiniteNumber(
+        scaleObject?.x
+      )
+        ? scaleObject.x
+        : item.scaleX,
+
+    scaleY:
+      isFiniteNumber(
+        scaleObject?.y
+      )
+        ? scaleObject.y
+        : item.scaleY,
+
+    scaleZ:
+      isFiniteNumber(
+        scaleObject?.z
+      )
+        ? scaleObject.z
+        : item.scaleZ,
 
     scale:
       isFiniteNumber(item.scale)
@@ -330,41 +378,32 @@ function convertSavedObject(item) {
 async function getStartupComposition(
   compositionOverride
 ) {
-  /*
-   * Preview kasutab alati etteantud versiooni
-   * ega kirjuta localStorage’it või pilve üle.
-   */
   if (
     compositionOverride &&
-    typeof compositionOverride === "object"
+    typeof compositionOverride ===
+      "object"
   ) {
     return compositionOverride;
   }
 
-  /*
-   * Tavalise käivitamise ajal proovime esimesena
-   * laadida kõigi külastajate ühise viimase versiooni.
-   */
   const cloudComposition =
     await loadCloudComposition();
 
   if (
     cloudComposition &&
-    typeof cloudComposition === "object"
+    typeof cloudComposition ===
+      "object"
   ) {
     return cloudComposition;
   }
 
-  /*
-   * Kui Supabase ei ole kättesaadav, kasutame
-   * selle brauseri kohalikku varukoopiat.
-   */
   const localComposition =
     loadComposition();
 
   if (
     localComposition &&
-    typeof localComposition === "object"
+    typeof localComposition ===
+      "object"
   ) {
     return localComposition;
   }
@@ -384,7 +423,9 @@ export async function loadModels(
     );
 
   const savedObjects =
-    Array.isArray(composition?.objects)
+    Array.isArray(
+      composition?.objects
+    )
       ? composition.objects
       : Array.isArray(composition)
         ? composition
@@ -408,9 +449,12 @@ export async function loadModels(
     finishedCount += 1;
 
     if (
-      finishedCount === list.length
+      finishedCount ===
+      list.length
     ) {
-      onComplete?.(composition);
+      onComplete?.(
+        composition
+      );
     }
   };
 

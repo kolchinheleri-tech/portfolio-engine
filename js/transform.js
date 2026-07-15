@@ -49,6 +49,7 @@ const selectionGroup =
 scene.add(selectionGroup);
 
 let selectedObjects = [];
+let multiSelectMode = false;
 
 const undoStack = [];
 const redoStack = [];
@@ -61,7 +62,24 @@ function notifySelectionChange() {
       "exhibition-selection-change",
       {
         detail: {
-          count: selectedObjects.length
+          count:
+            selectedObjects.length,
+
+          multiSelectMode
+        }
+      }
+    )
+  );
+}
+
+function notifyMultiSelectChange() {
+  window.dispatchEvent(
+    new CustomEvent(
+      "exhibition-multi-select-change",
+      {
+        detail: {
+          active:
+            multiSelectMode
         }
       }
     )
@@ -69,27 +87,35 @@ function notifySelectionChange() {
 }
 
 function snapshot() {
-  return objects.map((object) => ({
-    id: object.userData.id,
-    file: object.userData.file,
+  return objects.map(
+    (object) => ({
+      id:
+        object.userData.id,
 
-    isCopy:
-      Boolean(
-        object.userData.isCopy
-      ),
+      file:
+        object.userData.file,
 
-    x: object.position.x,
-    y: object.position.y,
-    z: object.position.z,
+      isCopy:
+        Boolean(
+          object.userData.isCopy
+        ),
 
-    rx: object.rotation.x,
-    ry: object.rotation.y,
-    rz: object.rotation.z,
+      visible:
+        object.visible !== false,
 
-    scaleX: object.scale.x,
-    scaleY: object.scale.y,
-    scaleZ: object.scale.z
-  }));
+      x: object.position.x,
+      y: object.position.y,
+      z: object.position.z,
+
+      rx: object.rotation.x,
+      ry: object.rotation.y,
+      rz: object.rotation.z,
+
+      scaleX: object.scale.x,
+      scaleY: object.scale.y,
+      scaleZ: object.scale.z
+    })
+  );
 }
 
 function pushUndo() {
@@ -106,9 +132,8 @@ function pushUndo() {
 
 function clampToFloor(object) {
   const box =
-    new THREE.Box3().setFromObject(
-      object
-    );
+    new THREE.Box3()
+      .setFromObject(object);
 
   if (box.min.y < FLOOR_Y) {
     object.position.y +=
@@ -118,7 +143,8 @@ function clampToFloor(object) {
 
 function bakeSelectionGroup() {
   if (
-    selectionGroup.children.length === 0
+    selectionGroup.children
+      .length === 0
   ) {
     return;
   }
@@ -154,13 +180,24 @@ function bakeSelectionGroup() {
 function attachSelection() {
   bakeSelectionGroup();
 
-  if (selectedObjects.length === 0) {
+  selectedObjects =
+    selectedObjects.filter(
+      (object) =>
+        objects.includes(object) &&
+        object.visible !== false
+    );
+
+  if (
+    selectedObjects.length === 0
+  ) {
     transform.detach();
     notifySelectionChange();
     return;
   }
 
-  if (selectedObjects.length === 1) {
+  if (
+    selectedObjects.length === 1
+  ) {
     transform.attach(
       selectedObjects[0]
     );
@@ -172,11 +209,13 @@ function attachSelection() {
   const center =
     new THREE.Vector3();
 
-  selectedObjects.forEach((object) => {
-    center.add(
-      object.position
-    );
-  });
+  selectedObjects.forEach(
+    (object) => {
+      center.add(
+        object.position
+      );
+    }
+  );
 
   center.divideScalar(
     selectedObjects.length
@@ -198,9 +237,13 @@ function attachSelection() {
     1
   );
 
-  selectedObjects.forEach((object) => {
-    selectionGroup.attach(object);
-  });
+  selectedObjects.forEach(
+    (object) => {
+      selectionGroup.attach(
+        object
+      );
+    }
+  );
 
   transform.attach(
     selectionGroup
@@ -244,13 +287,16 @@ function clearSceneObjects() {
 
 function restore(state) {
   bakeSelectionGroup();
-
   clearSceneObjects();
 
   selectedObjects = [];
 
   transform.detach();
   notifySelectionChange();
+
+  if (state.length === 0) {
+    return;
+  }
 
   state.forEach((item) => {
     loadSingleModel(item);
@@ -289,9 +335,15 @@ function getClickedObject(event) {
     camera
   );
 
+  const visibleObjects =
+    objects.filter(
+      (object) =>
+        object.visible !== false
+    );
+
   const hits =
     raycaster.intersectObjects(
-      objects,
+      visibleObjects,
       true
     );
 
@@ -309,7 +361,10 @@ function getClickedObject(event) {
     object = object.parent;
   }
 
-  return objects.includes(object)
+  return (
+    objects.includes(object) &&
+    object.visible !== false
+  )
     ? object
     : null;
 }
@@ -322,30 +377,43 @@ function selectObject(event) {
   const object =
     getClickedObject(event);
 
+  const useMultiSelection =
+    multiSelectMode ||
+    event.shiftKey;
+
   if (!object) {
-    bakeSelectionGroup();
+    if (!useMultiSelection) {
+      bakeSelectionGroup();
 
-    selectedObjects = [];
+      selectedObjects = [];
 
-    transform.detach();
-    notifySelectionChange();
+      transform.detach();
+      notifySelectionChange();
+    }
 
     return;
   }
 
-  if (event.shiftKey) {
+  if (useMultiSelection) {
     if (
-      selectedObjects.includes(object)
+      selectedObjects.includes(
+        object
+      )
     ) {
       selectedObjects =
         selectedObjects.filter(
-          (item) => item !== object
+          (item) =>
+            item !== object
         );
     } else {
-      selectedObjects.push(object);
+      selectedObjects.push(
+        object
+      );
     }
   } else {
-    selectedObjects = [object];
+    selectedObjects = [
+      object
+    ];
   }
 
   attachSelection();
@@ -354,21 +422,26 @@ function selectObject(event) {
 function applyPostTransform() {
   bakeSelectionGroup();
 
-  selectedObjects.forEach((object) => {
-    clampToFloor(object);
-  });
+  selectedObjects.forEach(
+    (object) => {
+      clampToFloor(object);
+    }
+  );
 
   attachSelection();
 }
 
-export function setTransformMode(mode) {
+export function setTransformMode(
+  mode
+) {
   const allowedModes = [
     "translate",
-    "rotate",
-    "scale"
+    "rotate"
   ];
 
-  if (!allowedModes.includes(mode)) {
+  if (
+    !allowedModes.includes(mode)
+  ) {
     return;
   }
 
@@ -386,6 +459,28 @@ export function setTransformMode(mode) {
   );
 }
 
+export function setMultiSelectMode(
+  active
+) {
+  multiSelectMode =
+    Boolean(active);
+
+  notifyMultiSelectChange();
+  notifySelectionChange();
+
+  return multiSelectMode;
+}
+
+export function toggleMultiSelectMode() {
+  return setMultiSelectMode(
+    !multiSelectMode
+  );
+}
+
+export function getMultiSelectMode() {
+  return multiSelectMode;
+}
+
 export function getSelectionCount() {
   return selectedObjects.length;
 }
@@ -396,7 +491,9 @@ export function scaleSelected(
   if (
     selectedObjects.length === 0 ||
     typeof multiplier !== "number" ||
-    !Number.isFinite(multiplier) ||
+    !Number.isFinite(
+      multiplier
+    ) ||
     multiplier <= 0
   ) {
     return false;
@@ -405,21 +502,76 @@ export function scaleSelected(
   bakeSelectionGroup();
   pushUndo();
 
-  selectedObjects.forEach((object) => {
-    object.scale.multiplyScalar(
-      multiplier
-    );
+  selectedObjects.forEach(
+    (object) => {
+      object.scale.multiplyScalar(
+        multiplier
+      );
 
-    clampToFloor(object);
-  });
+      clampToFloor(object);
+    }
+  );
 
   attachSelection();
 
   return true;
 }
 
+export function hideSelected() {
+  if (
+    selectedObjects.length === 0
+  ) {
+    return false;
+  }
+
+  bakeSelectionGroup();
+  pushUndo();
+
+  selectedObjects.forEach(
+    (object) => {
+      object.visible = false;
+    }
+  );
+
+  selectedObjects = [];
+
+  transform.detach();
+  notifySelectionChange();
+
+  return true;
+}
+
+export function showAllObjects() {
+  const hiddenObjects =
+    objects.filter(
+      (object) =>
+        object.visible === false
+    );
+
+  if (
+    hiddenObjects.length === 0
+  ) {
+    return false;
+  }
+
+  bakeSelectionGroup();
+  pushUndo();
+
+  hiddenObjects.forEach(
+    (object) => {
+      object.visible = true;
+    }
+  );
+
+  notifySelectionChange();
+
+  return true;
+}
+
 export function undoLastChange() {
-  if (undoStack.length === 0) {
+  if (
+    undoStack.length === 0
+  ) {
     return false;
   }
 
@@ -427,18 +579,17 @@ export function undoLastChange() {
     snapshot()
   );
 
-  const previousState =
-    undoStack.pop();
-
   restore(
-    previousState
+    undoStack.pop()
   );
 
   return true;
 }
 
 export function redoLastChange() {
-  if (redoStack.length === 0) {
+  if (
+    redoStack.length === 0
+  ) {
     return false;
   }
 
@@ -446,18 +597,17 @@ export function redoLastChange() {
     snapshot()
   );
 
-  const nextState =
-    redoStack.pop();
-
   restore(
-    nextState
+    redoStack.pop()
   );
 
   return true;
 }
 
 export function duplicateSelected() {
-  if (selectedObjects.length === 0) {
+  if (
+    selectedObjects.length === 0
+  ) {
     return false;
   }
 
@@ -483,15 +633,18 @@ export function duplicateSelected() {
           original.userData.file,
 
         isCopy: true,
+        visible: true,
 
         x:
-          original.position.x + 0.7,
+          original.position.x +
+          0.7,
 
         y:
           original.position.y,
 
         z:
-          original.position.z + 0.25,
+          original.position.z +
+          0.25,
 
         rx:
           original.rotation.x,
@@ -514,6 +667,7 @@ export function duplicateSelected() {
 
       loadSingleModel(
         data,
+
         (newObject) => {
           selectedObjects.push(
             newObject
@@ -557,7 +711,10 @@ export function deleteSelectedCopies() {
       objects.indexOf(copy);
 
     if (index !== -1) {
-      objects.splice(index, 1);
+      objects.splice(
+        index,
+        1
+      );
     }
   });
 
@@ -594,6 +751,7 @@ function resetToMaster() {
 
 transform.addEventListener(
   "mouseDown",
+
   () => {
     pushUndo();
   }
@@ -601,6 +759,7 @@ transform.addEventListener(
 
 transform.addEventListener(
   "dragging-changed",
+
   (event) => {
     orbit.enabled =
       !event.value;
@@ -618,6 +777,7 @@ renderer.domElement.addEventListener(
 
 window.addEventListener(
   "keydown",
+
   (event) => {
     const key =
       event.key.toLowerCase();
