@@ -18,13 +18,19 @@ import {
   initVersionHistory
 } from "./version-history.js";
 
+import {
+  initMobileToolbar
+} from "./mobile-toolbar.js";
+
 function isAdminMode() {
   const parameters =
     new URLSearchParams(
       window.location.search
     );
 
-  return parameters.get("admin") === "1";
+  return (
+    parameters.get("admin") === "1"
+  );
 }
 
 function configureAdminInterface() {
@@ -48,7 +54,9 @@ function configureAdminInterface() {
 
     if (historyPanel) {
       historyPanel.hidden = true;
-      historyPanel.dataset.open = "false";
+
+      historyPanel.dataset.open =
+        "false";
 
       historyPanel.setAttribute(
         "aria-hidden",
@@ -81,13 +89,6 @@ function configureAdminInterface() {
 startViewer();
 
 loadModels(() => {
-  /*
-   * Kadreerime kõik objektid automaatselt.
-   *
-   * Salvestatud kompositsiooni kaamera asendit
-   * ei kasutata, sest see võib olla liiga paremal,
-   * liiga lähedal või liiga kaugel.
-   */
   frameObjects();
   orbit.update();
 
@@ -97,9 +98,11 @@ loadModels(() => {
     );
 
   if (loading) {
-    loading.style.display = "none";
+    loading.style.display =
+      "none";
   }
 });
 
 initSaveButton();
+initMobileToolbar();
 configureAdminInterface();

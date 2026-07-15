@@ -7,7 +7,12 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="
+            width=device-width,
+            initial-scale=1.0,
+            maximum-scale=1.0,
+            user-scalable=no
+        "
     >
 
     <title>Exhibition Space</title>
@@ -33,8 +38,12 @@
                 Exhibition Space
             </div>
 
-            <small>
+            <small class="desktop-instructions">
                 Click / W / E / + / − / Ctrl+D
+            </small>
+
+            <small class="mobile-instructions">
+                Tap an object, then choose a tool
             </small>
 
         </div>
@@ -62,6 +71,63 @@
                 aria-live="polite"
             ></div>
 
+        </div>
+
+        <nav
+            id="mobile-toolbar"
+            aria-label="Mobile exhibition tools"
+        >
+
+            <button
+                class="mobile-tool-button"
+                type="button"
+                data-tool="translate"
+                data-active="true"
+            >
+                Move
+            </button>
+
+            <button
+                class="mobile-tool-button"
+                type="button"
+                data-tool="rotate"
+                data-active="false"
+            >
+                Rotate
+            </button>
+
+            <button
+                class="mobile-tool-button"
+                type="button"
+                data-tool="scale"
+                data-active="false"
+            >
+                Scale
+            </button>
+
+            <button
+                id="mobile-duplicate"
+                class="mobile-tool-button"
+                type="button"
+            >
+                Duplicate
+            </button>
+
+            <button
+                id="mobile-save"
+                class="mobile-tool-button mobile-save-button"
+                type="button"
+            >
+                Save
+            </button>
+
+        </nav>
+
+        <div
+            id="mobile-tool-status"
+            aria-live="polite"
+        >
+            Tap an object to begin
         </div>
 
         <aside
