@@ -192,12 +192,7 @@ canvas {
 
 }
 
-#mobile-toolbar {
-
-    display: none;
-
-}
-
+#mobile-toolbar,
 #mobile-tool-status {
 
     display: none;
@@ -477,9 +472,13 @@ button:focus-visible {
     #hud {
 
         right: 12px;
-        bottom: 94px;
+        bottom:
+            calc(
+                142px +
+                env(safe-area-inset-bottom)
+            );
 
-        max-width: 180px;
+        max-width: 190px;
 
         text-align: right;
 
@@ -502,7 +501,11 @@ button:focus-visible {
     #loading {
 
         left: 12px;
-        bottom: 94px;
+        bottom:
+            calc(
+                142px +
+                env(safe-area-inset-bottom)
+            );
 
         font-size: 10px;
 
@@ -523,7 +526,7 @@ button:focus-visible {
         display: grid;
 
         grid-template-columns:
-            repeat(5, minmax(0, 1fr));
+            repeat(4, minmax(0, 1fr));
 
         gap: 5px;
 
@@ -592,18 +595,18 @@ button:focus-visible {
         left: 12px;
         bottom:
             calc(
-                70px +
+                116px +
                 env(safe-area-inset-bottom)
             );
 
         display: block;
 
-        max-width: 210px;
+        max-width: 220px;
 
         padding: 5px 8px;
 
         background:
-            rgba(255, 255, 255, .86);
+            rgba(255, 255, 255, .88);
 
         color:
             rgba(180, 0, 0, .8);

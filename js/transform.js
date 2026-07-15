@@ -21,7 +21,6 @@ import {
 } from "./loader.js";
 
 import {
-  saveComposition,
   clearComposition
 } from "./storage.js";
 
@@ -73,8 +72,11 @@ function snapshot() {
   return objects.map((object) => ({
     id: object.userData.id,
     file: object.userData.file,
+
     isCopy:
-      object.userData.isCopy || false,
+      Boolean(
+        object.userData.isCopy
+      ),
 
     x: object.position.x,
     y: object.position.y,
@@ -84,7 +86,9 @@ function snapshot() {
     ry: object.rotation.y,
     rz: object.rotation.z,
 
-    scale: object.scale.x
+    scaleX: object.scale.x,
+    scaleY: object.scale.y,
+    scaleZ: object.scale.z
   }));
 }
 
@@ -205,12 +209,44 @@ function attachSelection() {
   notifySelectionChange();
 }
 
-function restore(state) {
+function disposeObject(object) {
+  object.traverse((child) => {
+    if (!child.isMesh) {
+      return;
+    }
+
+    child.geometry?.dispose();
+
+    if (
+      Array.isArray(
+        child.material
+      )
+    ) {
+      child.material.forEach(
+        (material) => {
+          material.dispose?.();
+        }
+      );
+    } else {
+      child.material?.dispose?.();
+    }
+  });
+}
+
+function clearSceneObjects() {
   objects.forEach((object) => {
     scene.remove(object);
+    disposeObject(object);
   });
 
   objects.length = 0;
+}
+
+function restore(state) {
+  bakeSelectionGroup();
+
+  clearSceneObjects();
+
   selectedObjects = [];
 
   transform.detach();
@@ -354,6 +390,72 @@ export function getSelectionCount() {
   return selectedObjects.length;
 }
 
+export function scaleSelected(
+  multiplier
+) {
+  if (
+    selectedObjects.length === 0 ||
+    typeof multiplier !== "number" ||
+    !Number.isFinite(multiplier) ||
+    multiplier <= 0
+  ) {
+    return false;
+  }
+
+  bakeSelectionGroup();
+  pushUndo();
+
+  selectedObjects.forEach((object) => {
+    object.scale.multiplyScalar(
+      multiplier
+    );
+
+    clampToFloor(object);
+  });
+
+  attachSelection();
+
+  return true;
+}
+
+export function undoLastChange() {
+  if (undoStack.length === 0) {
+    return false;
+  }
+
+  redoStack.push(
+    snapshot()
+  );
+
+  const previousState =
+    undoStack.pop();
+
+  restore(
+    previousState
+  );
+
+  return true;
+}
+
+export function redoLastChange() {
+  if (redoStack.length === 0) {
+    return false;
+  }
+
+  undoStack.push(
+    snapshot()
+  );
+
+  const nextState =
+    redoStack.pop();
+
+  restore(
+    nextState
+  );
+
+  return true;
+}
+
 export function duplicateSelected() {
   if (selectedObjects.length === 0) {
     return false;
@@ -400,8 +502,14 @@ export function duplicateSelected() {
         rz:
           original.rotation.z,
 
-        scale:
-          original.scale.x
+        scaleX:
+          original.scale.x,
+
+        scaleY:
+          original.scale.y,
+
+        scaleZ:
+          original.scale.z
       };
 
       loadSingleModel(
@@ -443,6 +551,7 @@ export function deleteSelectedCopies() {
 
   copies.forEach((copy) => {
     scene.remove(copy);
+    disposeObject(copy);
 
     const index =
       objects.indexOf(copy);
@@ -466,11 +575,9 @@ export function deleteSelectedCopies() {
 function resetToMaster() {
   pushUndo();
 
-  objects.forEach((object) => {
-    scene.remove(object);
-  });
+  bakeSelectionGroup();
+  clearSceneObjects();
 
-  objects.length = 0;
   selectedObjects = [];
 
   transform.detach();
@@ -521,16 +628,7 @@ window.addEventListener(
       !event.shiftKey
     ) {
       event.preventDefault();
-
-      if (undoStack.length > 0) {
-        redoStack.push(
-          snapshot()
-        );
-
-        restore(
-          undoStack.pop()
-        );
-      }
+      undoLastChange();
     }
 
     if (
@@ -539,16 +637,7 @@ window.addEventListener(
       key === "z"
     ) {
       event.preventDefault();
-
-      if (redoStack.length > 0) {
-        undoStack.push(
-          snapshot()
-        );
-
-        restore(
-          redoStack.pop()
-        );
-      }
+      redoLastChange();
     }
 
     if (
@@ -579,10 +668,18 @@ window.addEventListener(
       );
     }
 
-    if (key === "r") {
-      setTransformMode(
-        "scale"
-      );
+    if (
+      key === "+" ||
+      key === "="
+    ) {
+      scaleSelected(1.08);
+    }
+
+    if (
+      key === "-" ||
+      key === "_"
+    ) {
+      scaleSelected(0.92);
     }
 
     if (

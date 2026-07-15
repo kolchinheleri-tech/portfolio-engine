@@ -1,7 +1,9 @@
 import {
   setTransformMode,
   duplicateSelected,
-  getSelectionCount
+  getSelectionCount,
+  scaleSelected,
+  undoLastChange
 } from "./transform.js";
 
 function setToolbarStatus(
@@ -36,6 +38,21 @@ function setActiveTool(mode) {
     });
 }
 
+function requireSelection(
+  message
+) {
+  if (getSelectionCount() > 0) {
+    return true;
+  }
+
+  setToolbarStatus(
+    message,
+    true
+  );
+
+  return false;
+}
+
 export function initMobileToolbar() {
   const toolbar =
     document.getElementById(
@@ -49,6 +66,21 @@ export function initMobileToolbar() {
   const toolButtons =
     toolbar.querySelectorAll(
       "[data-tool]"
+    );
+
+  const scaleUpButton =
+    document.getElementById(
+      "mobile-scale-up"
+    );
+
+  const scaleDownButton =
+    document.getElementById(
+      "mobile-scale-down"
+    );
+
+  const undoButton =
+    document.getElementById(
+      "mobile-undo"
     );
 
   const duplicateButton =
@@ -77,9 +109,11 @@ export function initMobileToolbar() {
         setActiveTool(mode);
 
         const labels = {
-          translate: "Move tool active",
-          rotate: "Rotate tool active",
-          scale: "Scale tool active"
+          translate:
+            "Move tool active",
+
+          rotate:
+            "Rotate tool active"
         };
 
         setToolbarStatus(
@@ -90,15 +124,73 @@ export function initMobileToolbar() {
     );
   });
 
-  duplicateButton?.addEventListener(
+  scaleUpButton?.addEventListener(
     "click",
     () => {
-      if (getSelectionCount() === 0) {
+      if (
+        !requireSelection(
+          "Tap an object before resizing"
+        )
+      ) {
+        return;
+      }
+
+      scaleSelected(1.08);
+
+      setToolbarStatus(
+        "Object enlarged"
+      );
+    }
+  );
+
+  scaleDownButton?.addEventListener(
+    "click",
+    () => {
+      if (
+        !requireSelection(
+          "Tap an object before resizing"
+        )
+      ) {
+        return;
+      }
+
+      scaleSelected(0.92);
+
+      setToolbarStatus(
+        "Object reduced"
+      );
+    }
+  );
+
+  undoButton?.addEventListener(
+    "click",
+    () => {
+      const undone =
+        undoLastChange();
+
+      if (!undone) {
         setToolbarStatus(
-          "Tap an object before duplicating",
+          "Nothing to undo",
           true
         );
 
+        return;
+      }
+
+      setToolbarStatus(
+        "Last change undone"
+      );
+    }
+  );
+
+  duplicateButton?.addEventListener(
+    "click",
+    () => {
+      if (
+        !requireSelection(
+          "Tap an object before duplicating"
+        )
+      ) {
         return;
       }
 
@@ -167,11 +259,16 @@ export function initMobileToolbar() {
       const mode =
         event.detail?.mode;
 
-      if (mode) {
+      if (
+        mode === "translate" ||
+        mode === "rotate"
+      ) {
         setActiveTool(mode);
       }
     }
   );
 
-  setActiveTool("translate");
+  setActiveTool(
+    "translate"
+  );
 }
