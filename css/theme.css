@@ -1,0 +1,358 @@
+@font-face {
+
+    font-family: "POTI";
+
+    src:
+        url("/fonts/poti.ttf")
+        format("truetype");
+
+    font-weight: normal;
+
+    font-style: normal;
+
+    font-display: swap;
+
+}
+
+
+/* =========================================================
+   GLOBAL DESIGN TOKENS
+   ========================================================= */
+
+:root {
+
+    --color-bg:
+        #ffffff;
+
+
+    --color-red:
+        #b30000;
+
+
+    --color-red-dark:
+        #770000;
+
+
+    --color-red-soft:
+        rgba(
+            179,
+            0,
+            0,
+            .28
+        );
+
+
+    --color-red-faint:
+        rgba(
+            179,
+            0,
+            0,
+            .12
+        );
+
+
+    /*
+     * Expressive object-title font.
+     * Use sparingly.
+     */
+    --font-object:
+        "POTI",
+        sans-serif;
+
+
+    /*
+     * Main interface font.
+     * Narrow, neutral and readable.
+     */
+    --font-ui:
+        "Archivo Narrow",
+        Arial,
+        sans-serif;
+
+
+    /*
+     * Body and technical information.
+     * Same family keeps the whole
+     * interface visually coherent.
+     */
+    --font-body:
+        "Archivo Narrow",
+        Arial,
+        sans-serif;
+
+
+    /*
+     * Accent font is intentionally
+     * the same as UI for now.
+     * This avoids unnecessary
+     * competition between typefaces.
+     */
+    --font-accent:
+        "Archivo Narrow",
+        Arial,
+        sans-serif;
+
+
+    --page-padding-desktop:
+        38px;
+
+
+    --page-padding-mobile:
+        16px;
+
+
+    --transition-fast:
+        140ms ease;
+
+
+    --transition-normal:
+        220ms ease;
+
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+
+html {
+
+    margin: 0;
+
+    padding: 0;
+
+    background:
+        var(
+            --color-bg
+        );
+
+}
+
+
+body {
+
+    margin: 0;
+
+    padding: 0;
+
+    min-height: 100%;
+
+    background:
+        var(
+            --color-bg
+        );
+
+    color:
+        var(
+            --color-red
+        );
+
+    font-family:
+        var(
+            --font-body
+        );
+
+    font-weight: 400;
+
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        optimizeLegibility;
+
+}
+
+
+button,
+input,
+textarea,
+select {
+
+    font: inherit;
+
+}
+
+
+button {
+
+    color: inherit;
+
+}
+
+
+a {
+
+    color: inherit;
+
+}
+
+
+/* =========================================================
+   TYPE SYSTEM
+   ========================================================= */
+
+.type-object {
+
+    font-family:
+        var(
+            --font-object
+        );
+
+    font-weight: normal;
+
+    letter-spacing: 0;
+
+    text-transform: uppercase;
+
+}
+
+
+.type-ui {
+
+    font-family:
+        var(
+            --font-ui
+        );
+
+    font-weight: 400;
+
+    letter-spacing: .035em;
+
+    text-transform: uppercase;
+
+}
+
+
+.type-body {
+
+    font-family:
+        var(
+            --font-body
+        );
+
+    font-weight: 400;
+
+}
+
+
+.type-accent {
+
+    font-family:
+        var(
+            --font-accent
+        );
+
+    font-weight: 400;
+
+    text-transform: uppercase;
+
+}
+
+
+/* =========================================================
+   COMMON INTERACTIONS
+   ========================================================= */
+
+.ui-link {
+
+    text-decoration: none;
+
+    transition:
+        opacity
+        var(
+            --transition-fast
+        );
+
+}
+
+
+.ui-link:hover {
+
+    opacity: .55;
+
+}
+
+
+.ui-button {
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: inherit;
+
+    cursor: pointer;
+
+    transition:
+        opacity
+        var(
+            --transition-fast
+        ),
+        transform
+        var(
+            --transition-fast
+        );
+
+}
+
+
+.ui-button:hover {
+
+    opacity: .55;
+
+}
+
+
+/* =========================================================
+   SMALL TEXT
+   ========================================================= */
+
+.micro-text {
+
+    font-family:
+        var(
+            --font-ui
+        );
+
+    font-size: 12px;
+
+    font-weight: 400;
+
+    line-height: 1;
+
+    letter-spacing: .04em;
+
+    text-transform: uppercase;
+
+    opacity: .62;
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (
+    max-width: 800px
+) {
+
+    :root {
+
+        --page-padding-desktop:
+            var(
+                --page-padding-mobile
+            );
+
+    }
+
+}

@@ -17,9 +17,40 @@
 
     <title>Exhibition Space</title>
 
+
+    <!-- ===================================================
+         GOOGLE FONTS
+         =================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;500&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- ===================================================
+         STYLES
+         =================================================== -->
+
     <link
         rel="stylesheet"
         href="/css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/theme.css"
     >
 
     <link
@@ -38,25 +69,28 @@
             aria-label="Product information"
         ></div>
 
+
         <div id="loading">
-            Loading Exhibition Space...
+            LOADING EXHIBITION SPACE...
         </div>
+
 
         <div id="hud">
 
-            <div>
-                Exhibition Space
-            </div>
-
-            <small class="desktop-instructions">
-                Click / W / E / + / − / Ctrl+D
+            <small
+                class="desktop-instructions"
+            >
+                CLICK / W / E / + / − / CTRL+D
             </small>
 
-            <small class="mobile-instructions">
-                Tap an object, then choose a tool
+            <small
+                class="mobile-instructions"
+            >
+                TAP AN OBJECT, THEN CHOOSE A TOOL
             </small>
 
         </div>
+
 
         <div id="top-controls">
 
@@ -66,14 +100,14 @@
                 aria-controls="version-history-panel"
                 aria-expanded="false"
             >
-                History
+                ARCHIVE
             </button>
 
             <button
                 id="save-composition"
                 type="button"
             >
-                Save Composition
+                SAVE
             </button>
 
             <div
@@ -82,6 +116,7 @@
             ></div>
 
         </div>
+
 
         <nav
             id="mobile-toolbar"
@@ -94,7 +129,7 @@
                 data-tool="translate"
                 data-active="true"
             >
-                Move
+                MOVE
             </button>
 
             <button
@@ -103,7 +138,7 @@
                 data-tool="rotate"
                 data-active="false"
             >
-                Rotate
+                ROTATE
             </button>
 
             <button
@@ -111,7 +146,7 @@
                 class="mobile-tool-button"
                 type="button"
             >
-                Size+
+                SIZE+
             </button>
 
             <button
@@ -119,7 +154,7 @@
                 class="mobile-tool-button"
                 type="button"
             >
-                Size−
+                SIZE−
             </button>
 
             <button
@@ -127,7 +162,7 @@
                 class="mobile-tool-button"
                 type="button"
             >
-                Back
+                BACK
             </button>
 
             <button
@@ -136,7 +171,7 @@
                 type="button"
                 data-active="false"
             >
-                Multi
+                MULTI
             </button>
 
             <button
@@ -144,7 +179,7 @@
                 class="mobile-tool-button"
                 type="button"
             >
-                Hide
+                HIDE
             </button>
 
             <button
@@ -152,7 +187,7 @@
                 class="mobile-tool-button"
                 type="button"
             >
-                Show
+                SHOW
             </button>
 
             <button
@@ -160,7 +195,7 @@
                 class="mobile-tool-button"
                 type="button"
             >
-                Duplicate
+                DUPLICATE
             </button>
 
             <button
@@ -168,17 +203,19 @@
                 class="mobile-tool-button mobile-save-button"
                 type="button"
             >
-                Save
+                SAVE
             </button>
 
         </nav>
+
 
         <div
             id="mobile-tool-status"
             aria-live="polite"
         >
-            Tap an object to begin
+            TAP AN OBJECT TO BEGIN
         </div>
+
 
         <aside
             id="version-history-panel"
@@ -187,16 +224,22 @@
             aria-label="Exhibition version history"
         >
 
-            <header id="version-history-header">
+            <header
+                id="version-history-header"
+            >
 
                 <div>
 
-                    <div id="version-history-title">
-                        Version History
+                    <div
+                        id="version-history-title"
+                    >
+                        ARCHIVE
                     </div>
 
-                    <div id="version-history-description">
-                        Saved exhibition compositions
+                    <div
+                        id="version-history-description"
+                    >
+                        SAVED EXHIBITION STATES
                     </div>
 
                 </div>
@@ -204,28 +247,33 @@
                 <button
                     id="close-version-history"
                     type="button"
-                    aria-label="Close version history"
+                    aria-label="Close archive"
                 >
                     ×
                 </button>
 
             </header>
 
-            <div id="version-history-actions">
+
+            <div
+                id="version-history-actions"
+            >
 
                 <button
                     id="refresh-version-history"
                     type="button"
                 >
-                    Refresh
+                    REFRESH
                 </button>
 
             </div>
+
 
             <div
                 id="version-preview-status"
                 aria-live="polite"
             ></div>
+
 
             <div
                 id="version-history-list"
@@ -235,6 +283,7 @@
         </aside>
 
     </div>
+
 
     <script
         type="module"

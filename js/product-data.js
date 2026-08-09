@@ -48,6 +48,17 @@ export const products = [
     shipping:
       "Shipping calculated separately depending on destination. Local pickup in Barcelona available.",
 
+    viewer: {
+      scale: 1,
+      cameraDistance: 4.3,
+
+      offset: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    },
+
     media: []
   },
 
@@ -79,7 +90,11 @@ export const products = [
     shortDescription:
       "A hand-formed sculptural study exploring soft geometry, surface accumulation and colour.",
 
-    description: [],
+    description: [
+      "Pink Form I develops through repeated forming, coating and surface adjustment.",
+
+      "Small irregularities remain visible as active parts of the object rather than being corrected during finishing."
+    ],
 
     details: [
       "Hand-finished",
@@ -89,6 +104,17 @@ export const products = [
 
     shipping:
       "Shipping calculated separately depending on destination.",
+
+    viewer: {
+      scale: 1,
+      cameraDistance: 4.3,
+
+      offset: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    },
 
     media: []
   },
@@ -121,7 +147,11 @@ export const products = [
     shortDescription:
       "An experimental sculptural object developed through manual forming and layered surface treatment.",
 
-    description: [],
+    description: [
+      "Yellow Form I investigates the relationship between a direct making process and a visually resolved object.",
+
+      "The final surface preserves evidence of forming, coating and finishing."
+    ],
 
     details: [
       "Hand-finished",
@@ -131,6 +161,17 @@ export const products = [
 
     shipping:
       "Shipping calculated separately depending on destination.",
+
+    viewer: {
+      scale: 1,
+      cameraDistance: 4.3,
+
+      offset: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    },
 
     media: []
   },
@@ -163,7 +204,11 @@ export const products = [
     shortDescription:
       "A layered sculptural composition balancing geometric mass with deliberately irregular surfaces.",
 
-    description: [],
+    description: [
+      "Green Form I is constructed as a sequence of material decisions rather than from a fixed final geometry.",
+
+      "Its surface records the physical process through changes in thickness, texture and colour."
+    ],
 
     details: [
       "Hand-finished",
@@ -173,6 +218,17 @@ export const products = [
 
     shipping:
       "Shipping calculated separately depending on destination.",
+
+    viewer: {
+      scale: 1,
+      cameraDistance: 4.3,
+
+      offset: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    },
 
     media: []
   },
@@ -205,7 +261,11 @@ export const products = [
     shortDescription:
       "A larger sculptural study combining a simple mass with an uneven hand-developed skin.",
 
-    description: [],
+    description: [
+      "Pink Form II continues the material language of the smaller studies at a larger scale.",
+
+      "The work retains traces of tools, pressure and repeated finishing operations used during fabrication."
+    ],
 
     details: [
       "Hand-finished",
@@ -215,6 +275,17 @@ export const products = [
 
     shipping:
       "Shipping calculated separately depending on destination.",
+
+    viewer: {
+      scale: 1,
+      cameraDistance: 4.3,
+
+      offset: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    },
 
     media: []
   },
@@ -227,12 +298,6 @@ export const products = [
       "/models/scan_rhidancey.glb",
 
     catalogueNumber: null,
-
-    /*
-     * Body / clothing scan remains
-     * part of the exhibition but
-     * gets no product label.
-     */
     showLabel: false,
 
     title: "RHIDANCEY",
@@ -253,6 +318,18 @@ export const products = [
     description: [],
     details: [],
     shipping: null,
+
+    viewer: {
+      scale: 1,
+      cameraDistance: 4.6,
+
+      offset: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    },
+
     media: []
   }
 ];
