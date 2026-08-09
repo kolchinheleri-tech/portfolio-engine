@@ -1,0 +1,314 @@
+export const products = [
+  {
+    id: "soft-block-i",
+    slug: "soft-block-i",
+
+    modelFile: "/models/1.glb",
+
+    catalogueNumber: "001",
+    showLabel: true,
+
+    title: "SOFT BLOCK I",
+    type: "UNIQUE OBJECT",
+    year: "2026",
+
+    price: 420,
+    currency: "EUR",
+
+    availability: "One of a kind",
+    edition: "Unique piece",
+
+    materials:
+      "Jesmonite, resin, pigment, foam core",
+
+    dimensions:
+      "Approx. 32 × 28 × 24 cm",
+
+    shortDescription:
+      "A compact sculptural object built through layering, coating and repeated surface modification.",
+
+    description: [
+      "Soft Block I is part of an ongoing series exploring the relationship between controlled geometry and material irregularity.",
+
+      "The object begins from a simple block-like volume and develops through successive layers of coating, pigmentation and manual finishing.",
+
+      "Rather than aiming for a perfectly resolved surface, the process retains small deformations, changes in thickness and traces of handwork.",
+
+      "Each piece in the series is produced individually and varies slightly in surface, colour and finish."
+    ],
+
+    details: [
+      "Hand-finished",
+      "Unique object",
+      "Signed and dated",
+      "Made in Barcelona",
+      "Indoor use"
+    ],
+
+    shipping:
+      "Shipping calculated separately depending on destination. Local pickup in Barcelona available.",
+
+    media: []
+  },
+
+  {
+    id: "pink-form-i",
+    slug: "pink-form-i",
+
+    modelFile: "/models/pink.glb",
+
+    catalogueNumber: "002",
+    showLabel: true,
+
+    title: "PINK FORM I",
+    type: "UNIQUE OBJECT",
+    year: "2026",
+
+    price: 380,
+    currency: "EUR",
+
+    availability: "One of a kind",
+    edition: "Unique piece",
+
+    materials:
+      "Pigmented composite, foam, resin",
+
+    dimensions:
+      "Dimensions to be confirmed",
+
+    shortDescription:
+      "A hand-formed sculptural study exploring soft geometry, surface accumulation and colour.",
+
+    description: [],
+
+    details: [
+      "Hand-finished",
+      "Unique object",
+      "Made in Barcelona"
+    ],
+
+    shipping:
+      "Shipping calculated separately depending on destination.",
+
+    media: []
+  },
+
+  {
+    id: "yellow-form-i",
+    slug: "yellow-form-i",
+
+    modelFile: "/models/yellow.glb",
+
+    catalogueNumber: "003",
+    showLabel: true,
+
+    title: "YELLOW FORM I",
+    type: "UNIQUE OBJECT",
+    year: "2026",
+
+    price: 390,
+    currency: "EUR",
+
+    availability: "One of a kind",
+    edition: "Unique piece",
+
+    materials:
+      "Pigmented composite, foam, resin",
+
+    dimensions:
+      "Dimensions to be confirmed",
+
+    shortDescription:
+      "An experimental sculptural object developed through manual forming and layered surface treatment.",
+
+    description: [],
+
+    details: [
+      "Hand-finished",
+      "Unique object",
+      "Made in Barcelona"
+    ],
+
+    shipping:
+      "Shipping calculated separately depending on destination.",
+
+    media: []
+  },
+
+  {
+    id: "green-form-i",
+    slug: "green-form-i",
+
+    modelFile: "/models/green.glb",
+
+    catalogueNumber: "004",
+    showLabel: true,
+
+    title: "GREEN FORM I",
+    type: "UNIQUE OBJECT",
+    year: "2026",
+
+    price: 440,
+    currency: "EUR",
+
+    availability: "One of a kind",
+    edition: "Unique piece",
+
+    materials:
+      "Pigmented composite, foam, resin",
+
+    dimensions:
+      "Dimensions to be confirmed",
+
+    shortDescription:
+      "A layered sculptural composition balancing geometric mass with deliberately irregular surfaces.",
+
+    description: [],
+
+    details: [
+      "Hand-finished",
+      "Unique object",
+      "Made in Barcelona"
+    ],
+
+    shipping:
+      "Shipping calculated separately depending on destination.",
+
+    media: []
+  },
+
+  {
+    id: "pink-form-ii",
+    slug: "pink-form-ii",
+
+    modelFile: "/models/pink big.glb",
+
+    catalogueNumber: "005",
+    showLabel: true,
+
+    title: "PINK FORM II",
+    type: "UNIQUE OBJECT",
+    year: "2026",
+
+    price: 520,
+    currency: "EUR",
+
+    availability: "One of a kind",
+    edition: "Unique piece",
+
+    materials:
+      "Pigmented composite, foam, resin",
+
+    dimensions:
+      "Dimensions to be confirmed",
+
+    shortDescription:
+      "A larger sculptural study combining a simple mass with an uneven hand-developed skin.",
+
+    description: [],
+
+    details: [
+      "Hand-finished",
+      "Unique object",
+      "Made in Barcelona"
+    ],
+
+    shipping:
+      "Shipping calculated separately depending on destination.",
+
+    media: []
+  },
+
+  {
+    id: "rhidancey",
+    slug: "rhidancey",
+
+    modelFile:
+      "/models/scan_rhidancey.glb",
+
+    catalogueNumber: null,
+
+    /*
+     * Body / clothing scan remains
+     * part of the exhibition but
+     * gets no product label.
+     */
+    showLabel: false,
+
+    title: "RHIDANCEY",
+    type: "BODY / CLOTHING SCAN",
+    year: "2026",
+
+    price: null,
+    currency: "EUR",
+
+    availability: null,
+    edition: null,
+
+    materials: null,
+    dimensions: null,
+
+    shortDescription: null,
+
+    description: [],
+    details: [],
+    shipping: null,
+    media: []
+  }
+];
+
+
+export function getProductByModelFile(
+  modelFile
+) {
+  return (
+    products.find(
+      (product) =>
+        product.modelFile ===
+        modelFile
+    ) ||
+    null
+  );
+}
+
+
+export function getProductBySlug(
+  slug
+) {
+  return (
+    products.find(
+      (product) =>
+        product.slug ===
+        slug
+    ) ||
+    null
+  );
+}
+
+
+export function formatProductPrice(
+  product
+) {
+  if (
+    !product ||
+    typeof product.price !==
+      "number"
+  ) {
+    return "";
+  }
+
+  return new Intl.NumberFormat(
+    "en-IE",
+    {
+      style: "currency",
+
+      currency:
+        product.currency ||
+        "EUR",
+
+      maximumFractionDigits: 0
+    }
+  ).format(
+    product.price
+  );
+}

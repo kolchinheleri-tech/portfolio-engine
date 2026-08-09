@@ -1,3 +1,10 @@
+@font-face {
+    font-family: "POTI";
+    src: url("/fonts/poti.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
 html,
 body {
 
@@ -693,6 +700,260 @@ button:focus-visible {
         width: 100vw;
 
         padding: 20px;
+
+    }
+
+}
+
+/* =========================================================
+   PRODUCT LABELS
+   ========================================================= */
+
+#product-label-layer {
+
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    z-index: 150;
+
+}
+
+
+.product-label {
+
+    position: absolute;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    width: 150px;
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color:
+        rgb(
+            185,
+            0,
+            0
+        );
+
+    font-family:
+        "Helvetica Neue",
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    font-size: 9px;
+
+    font-weight: 500;
+
+    line-height: 1.15;
+
+    letter-spacing:
+        -0.01em;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    /*
+     * Anchor is the bottom centre
+     * of the 3D object.
+     *
+     * Text therefore always stays
+     * below the object.
+     */
+    transform:
+        translate(
+            -50%,
+            48px
+        );
+
+    transition:
+        opacity .15s ease;
+
+}
+
+
+.product-label::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+
+    top: -42px;
+
+    width: 1px;
+
+    height: 32px;
+
+    background:
+        rgba(
+            185,
+            0,
+            0,
+            .5
+        );
+
+    transform:
+        translateX(-50%);
+
+}
+
+
+.product-label:hover {
+
+    opacity: .55;
+
+}
+
+
+.product-label-index {
+
+    margin-bottom: 10px;
+
+    font-size: 8px;
+
+    opacity: .48;
+
+}
+
+
+.product-label-title {
+
+    margin-bottom: 8px;
+
+    font-family:
+        "POTI",
+        "Helvetica Neue",
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    font-size: 22px;
+
+    font-weight: normal;
+
+    line-height: .82;
+
+    letter-spacing: 0;
+
+    text-transform: none;
+
+}
+
+
+.product-label-meta {
+
+    display: block;
+
+    font-size: 8px;
+
+    line-height: 1.3;
+
+    letter-spacing:
+        .035em;
+
+    text-transform:
+        uppercase;
+
+    opacity: .62;
+
+}
+
+
+.product-label-divider {
+
+    padding:
+        0
+        4px;
+
+    opacity: .45;
+
+}
+
+
+.product-label-action {
+
+    display: inline-block;
+
+    margin-top: 11px;
+
+    padding-bottom: 2px;
+
+    border-bottom:
+        1px solid
+        currentColor;
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    letter-spacing:
+        .03em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+/*
+ * Keep labels away from
+ * the mobile editing toolbar.
+ */
+@media (max-width: 767px) {
+
+    .product-label {
+
+        width: 112px;
+
+        transform:
+            translate(
+                -50%,
+                36px
+            );
+
+    }
+
+
+    .product-label::before {
+
+        top: -30px;
+
+        height: 22px;
+
+    }
+
+
+    .product-label-title {
+
+        font-size: 11px;
+
+    }
+
+
+    .product-label-index,
+    .product-label-meta,
+    .product-label-action {
+
+        font-size: 7px;
 
     }
 

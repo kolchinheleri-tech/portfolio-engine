@@ -1,0 +1,540 @@
+@font-face {
+
+    font-family: "POTI";
+
+    src:
+        url("/fonts/poti.ttf")
+        format("truetype");
+
+    font-weight: normal;
+
+    font-style: normal;
+
+    font-display: swap;
+
+}
+
+
+/* =========================================================
+   PRODUCT LABEL LAYER
+   ========================================================= */
+
+#product-label-layer {
+
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    z-index: 150;
+
+}
+
+
+/* =========================================================
+   PRODUCT LABEL
+   ========================================================= */
+
+.product-label {
+
+    --label-line-length: 72px;
+
+    --label-content-offset: 84px;
+
+    position: absolute;
+
+    width: 148px;
+
+    overflow: visible;
+
+    color:
+        rgb(
+            185,
+            0,
+            0
+        );
+
+    pointer-events: none;
+
+    /*
+     * Position itself is always
+     * centred underneath object.
+     */
+    transform:
+        translateX(-50%);
+
+}
+
+
+/* =========================================================
+   DOWNWARD CONNECTOR / ARROW
+   ========================================================= */
+
+.product-label-line {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 0;
+
+    width: 1px;
+
+    height:
+        var(
+            --label-line-length
+        );
+
+    background:
+        rgba(
+            185,
+            0,
+            0,
+            .52
+        );
+
+    transform:
+        translateX(-50%);
+
+    pointer-events: none;
+
+}
+
+
+/*
+ * Tiny downward arrowhead.
+ *
+ * Important:
+ * arrow points FROM object
+ * DOWN towards information.
+ */
+.product-label-line::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: 0;
+
+    width: 6px;
+    height: 6px;
+
+    border-right:
+        1px solid
+        rgba(
+            185,
+            0,
+            0,
+            .62
+        );
+
+    border-bottom:
+        1px solid
+        rgba(
+            185,
+            0,
+            0,
+            .62
+        );
+
+    transform:
+        translate(
+            -50%,
+            0
+        )
+        rotate(
+            45deg
+        );
+
+}
+
+
+/* =========================================================
+   LABEL CONTENT
+   ========================================================= */
+
+.product-label-content {
+
+    position: absolute;
+
+    left: 0;
+
+    top:
+        var(
+            --label-content-offset
+        );
+
+    width: 148px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    text-align: left;
+
+    pointer-events: none;
+
+}
+
+
+/* catalogue number */
+
+.product-label-index {
+
+    margin-bottom: 8px;
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    font-size: 7px;
+
+    line-height: 1;
+
+    letter-spacing:
+        .05em;
+
+    opacity: .45;
+
+}
+
+
+/* product title */
+
+.product-label-title {
+
+    display: block;
+
+    width: 100%;
+
+    margin-bottom: 9px;
+
+    font-family:
+        "POTI",
+        sans-serif;
+
+    font-size: 27px;
+
+    font-weight: normal;
+
+    line-height: .82;
+
+    letter-spacing: 0;
+
+    text-transform: uppercase;
+
+    white-space: normal;
+
+    overflow-wrap:
+        normal;
+
+}
+
+
+/* technical product information */
+
+.product-label-meta {
+
+    display: block;
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    font-size: 7px;
+
+    line-height: 1.4;
+
+    letter-spacing:
+        .045em;
+
+    text-transform: uppercase;
+
+    opacity: .62;
+
+}
+
+
+.product-label-year-price {
+
+    display: flex;
+
+    gap: 5px;
+
+}
+
+
+.product-label-separator {
+
+    opacity: .4;
+
+}
+
+
+/* =========================================================
+   VIEW LINK
+   ========================================================= */
+
+.product-label-action {
+
+    margin-top: 11px;
+
+    padding:
+        0
+        0
+        2px;
+
+    border: 0;
+
+    border-bottom:
+        1px solid
+        currentColor;
+
+    background: transparent;
+
+    color: inherit;
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    font-size: 7px;
+
+    line-height: 1;
+
+    letter-spacing:
+        .05em;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    transition:
+        transform .14s ease,
+        opacity .14s ease;
+
+}
+
+
+.product-label-action:hover {
+
+    transform:
+        translateX(4px);
+
+    opacity: .55;
+
+}
+
+
+/* =========================================================
+   SAVE COMPOSITION
+   ========================================================= */
+
+#save-composition {
+
+    width: auto;
+
+    height: auto;
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color:
+        rgb(
+            185,
+            0,
+            0
+        );
+
+    font-family:
+        "POTI",
+        sans-serif;
+
+    font-size: 24px;
+
+    font-weight: normal;
+
+    line-height: 1;
+
+    letter-spacing: 0;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    transition:
+        opacity .15s ease,
+        transform .15s ease;
+
+}
+
+
+#save-composition::before,
+#save-composition::after {
+
+    content: none;
+
+    display: none;
+
+}
+
+
+#save-composition:hover {
+
+    background: transparent;
+
+    opacity: .55;
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+/* =========================================================
+   EXHIBITION HUD
+   ========================================================= */
+
+#hud {
+
+    font-family:
+        "POTI",
+        sans-serif;
+
+    font-size: 21px;
+
+    font-weight: normal;
+
+    line-height: .9;
+
+    letter-spacing: 0;
+
+    text-transform: uppercase;
+
+}
+
+
+#hud > div {
+
+    text-transform: uppercase;
+
+}
+
+
+#hud small {
+
+    display: block;
+
+    margin-top: 8px;
+
+    font-family:
+        "POTI",
+        sans-serif;
+
+    font-size: 13px;
+
+    font-weight: normal;
+
+    line-height: 1.05;
+
+    letter-spacing: 0;
+
+    text-transform: uppercase;
+
+    opacity: .72;
+
+}
+
+
+/* =========================================================
+   SAVE STATUS
+   ========================================================= */
+
+#save-status {
+
+    top: 38px;
+
+    font-family:
+        "Courier New",
+        Courier,
+        monospace;
+
+    font-size: 8px;
+
+    text-transform: uppercase;
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .product-label {
+
+        width: 112px;
+
+    }
+
+
+    .product-label-content {
+
+        width: 112px;
+
+    }
+
+
+    .product-label-title {
+
+        font-size: 22px;
+
+    }
+
+
+    .product-label-index,
+    .product-label-meta,
+    .product-label-action {
+
+        font-size: 6px;
+
+    }
+
+
+    #save-composition {
+
+        font-size: 19px;
+
+    }
+
+
+    #hud {
+
+        font-size: 17px;
+
+    }
+
+
+    #hud small {
+
+        font-size: 10px;
+
+    }
+
+}

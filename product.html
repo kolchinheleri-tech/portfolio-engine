@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="
+            width=device-width,
+            initial-scale=1.0
+        "
+    >
+
+    <title>Object</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/product.css"
+    >
+
+</head>
+
+<body>
+
+    <header class="product-header">
+
+        <a
+            class="product-back"
+            href="/"
+        >
+            ← EXHIBITION
+        </a>
+
+        <button
+            id="cart-button"
+            type="button"
+        >
+            CART
+            <span id="cart-count">
+                0
+            </span>
+        </button>
+
+    </header>
+
+
+    <main
+        id="product-page"
+        class="product-page"
+    >
+
+        <section
+            class="product-media"
+            aria-label="Product media"
+        >
+
+            <div class="product-media-placeholder">
+
+                <span>
+                    PRODUCT PHOTO
+                </span>
+
+                <small>
+                    Add photography later
+                </small>
+
+            </div>
+
+            <div class="product-media-placeholder product-video-placeholder">
+
+                <span>
+                    VIDEO
+                </span>
+
+                <small>
+                    Add process or object video later
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <section
+            class="product-information"
+        >
+
+            <div
+                id="product-status"
+                class="product-status"
+            >
+                Loading...
+            </div>
+
+            <div id="product-content" hidden>
+
+                <div class="product-heading">
+
+                    <p
+                        id="product-subtitle"
+                        class="product-kicker"
+                    ></p>
+
+                    <h1
+                        id="product-title"
+                    ></h1>
+
+                    <div
+                        id="product-year"
+                        class="product-year"
+                    ></div>
+
+                </div>
+
+
+                <div class="product-purchase">
+
+                    <div
+                        id="product-price"
+                        class="product-price"
+                    ></div>
+
+                    <button
+                        id="add-to-cart"
+                        type="button"
+                    >
+                        ADD TO CART
+                    </button>
+
+                    <div
+                        id="cart-status"
+                        class="cart-status"
+                        aria-live="polite"
+                    ></div>
+
+                </div>
+
+
+                <dl class="product-facts">
+
+                    <div>
+                        <dt>
+                            MATERIAL
+                        </dt>
+
+                        <dd
+                            id="product-materials"
+                        ></dd>
+                    </div>
+
+                    <div>
+                        <dt>
+                            DIMENSIONS
+                        </dt>
+
+                        <dd
+                            id="product-dimensions"
+                        ></dd>
+                    </div>
+
+                    <div>
+                        <dt>
+                            AVAILABILITY
+                        </dt>
+
+                        <dd
+                            id="product-availability"
+                        ></dd>
+                    </div>
+
+                    <div>
+                        <dt>
+                            EDITION
+                        </dt>
+
+                        <dd
+                            id="product-edition"
+                        ></dd>
+                    </div>
+
+                </dl>
+
+
+                <div
+                    id="product-description"
+                    class="product-description"
+                ></div>
+
+
+                <div class="product-detail-section">
+
+                    <h2>
+                        DETAILS
+                    </h2>
+
+                    <ul
+                        id="product-details"
+                    ></ul>
+
+                </div>
+
+
+                <div class="product-detail-section">
+
+                    <h2>
+                        SHIPPING
+                    </h2>
+
+                    <p
+                        id="product-shipping"
+                    ></p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script
+        type="module"
+        src="/js/product-page.js"
+    ></script>
+
+</body>
+
+</html>

@@ -22,6 +22,10 @@ import {
   initMobileToolbar
 } from "./mobile-toolbar.js";
 
+import {
+  initProductLabels
+} from "./product-labels.js";
+
 function isAdminMode() {
   const parameters =
     new URLSearchParams(
@@ -101,6 +105,8 @@ loadModels(() => {
     loading.style.display =
       "none";
   }
+
+  initProductLabels();
 });
 
 initSaveButton();
