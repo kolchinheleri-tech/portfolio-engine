@@ -66,6 +66,15 @@ export const masterComposition = [
     z: -0.1,
     scaleFactor: 0.95,
     visible: true
+  },
+  {
+    id: "obj-6",
+    file: "/models/scan_rhidancey.glb",
+    x: 6,
+    y: 0,
+    z: 0,
+    scaleFactor: 1,
+    visible: true
   }
 ];
 
@@ -431,12 +440,30 @@ export async function loadModels(
         ? composition
         : null;
 
-  const list =
+  const savedList =
     savedObjects?.length
       ? savedObjects.map(
           convertSavedObject
         )
-      : masterComposition;
+      : [];
+
+  const savedByFile =
+    new Map(
+      savedList.map(
+        (item) => [
+          item.file,
+          item
+        ]
+      )
+    );
+
+  const list =
+    masterComposition.map(
+      (masterItem) =>
+        savedByFile.get(
+          masterItem.file
+        ) ?? masterItem
+    );
 
   if (list.length === 0) {
     onComplete?.(composition);
