@@ -447,23 +447,42 @@ export async function loadModels(
         )
       : [];
 
-  const savedByFile =
-    new Map(
-      savedList.map(
-        (item) => [
-          item.file,
-          item
-        ]
-      )
+  /*
+   * Keep every saved object exactly as it was saved.
+   * This is important for duplicates because multiple objects
+   * may intentionally reference the same GLB file.
+   *
+   * Then append only master objects that do not yet exist
+   * in the saved composition.
+   */
+  const savedMasterFiles =
+    new Set(
+      savedList
+        .filter(
+          (item) =>
+            !item.isCopy
+        )
+        .map(
+          (item) =>
+            item.file
+        )
+    );
+
+  const missingMasterItems =
+    masterComposition.filter(
+      (masterItem) =>
+        !savedMasterFiles.has(
+          masterItem.file
+        )
     );
 
   const list =
-    masterComposition.map(
-      (masterItem) =>
-        savedByFile.get(
-          masterItem.file
-        ) ?? masterItem
-    );
+    savedList.length
+      ? [
+          ...savedList,
+          ...missingMasterItems
+        ]
+      : masterComposition;
 
   if (list.length === 0) {
     onComplete?.(composition);
