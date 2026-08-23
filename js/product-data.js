@@ -12,7 +12,7 @@ export const products = [
     type: "UNIQUE OBJECT",
     year: "2026",
 
-    price: 420,
+    price: null,
     currency: "EUR",
 
     availability: "One of a kind",
@@ -41,12 +41,10 @@ export const products = [
       "Hand-finished",
       "Unique object",
       "Signed and dated",
-      "Made in Barcelona",
       "Indoor use"
     ],
 
-    shipping:
-      "Shipping calculated separately depending on destination. Local pickup in Barcelona available.",
+    shipping: null,
 
     viewer: {
       scale: 1,
@@ -75,7 +73,7 @@ export const products = [
     type: "UNIQUE OBJECT",
     year: "2026",
 
-    price: 380,
+    price: null,
     currency: "EUR",
 
     availability: "One of a kind",
@@ -98,12 +96,10 @@ export const products = [
 
     details: [
       "Hand-finished",
-      "Unique object",
-      "Made in Barcelona"
+      "Unique object"
     ],
 
-    shipping:
-      "Shipping calculated separately depending on destination.",
+    shipping: null,
 
     viewer: {
       scale: 1,
@@ -132,7 +128,7 @@ export const products = [
     type: "UNIQUE OBJECT",
     year: "2026",
 
-    price: 390,
+    price: null,
     currency: "EUR",
 
     availability: "One of a kind",
@@ -155,12 +151,10 @@ export const products = [
 
     details: [
       "Hand-finished",
-      "Unique object",
-      "Made in Barcelona"
+      "Unique object"
     ],
 
-    shipping:
-      "Shipping calculated separately depending on destination.",
+    shipping: null,
 
     viewer: {
       scale: 1,
@@ -189,7 +183,7 @@ export const products = [
     type: "UNIQUE OBJECT",
     year: "2026",
 
-    price: 440,
+    price: null,
     currency: "EUR",
 
     availability: "One of a kind",
@@ -212,12 +206,10 @@ export const products = [
 
     details: [
       "Hand-finished",
-      "Unique object",
-      "Made in Barcelona"
+      "Unique object"
     ],
 
-    shipping:
-      "Shipping calculated separately depending on destination.",
+    shipping: null,
 
     viewer: {
       scale: 1,
@@ -246,7 +238,7 @@ export const products = [
     type: "UNIQUE OBJECT",
     year: "2026",
 
-    price: 520,
+    price: null,
     currency: "EUR",
 
     availability: "One of a kind",
@@ -269,12 +261,10 @@ export const products = [
 
     details: [
       "Hand-finished",
-      "Unique object",
-      "Made in Barcelona"
+      "Unique object"
     ],
 
-    shipping:
-      "Shipping calculated separately depending on destination.",
+    shipping: null,
 
     viewer: {
       scale: 1,
