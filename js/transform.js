@@ -316,7 +316,7 @@ function getClickedObject(event) {
       ) /
       rect.width
     ) *
-      2 -
+    2 -
     1;
 
   mouse.y =
@@ -327,7 +327,7 @@ function getClickedObject(event) {
       ) /
       rect.height
     ) *
-      2 +
+    2 +
     1;
 
   raycaster.setFromCamera(
@@ -789,6 +789,24 @@ window.addEventListener(
     ) {
       event.preventDefault();
       undoLastChange();
+    }
+
+    if (
+      !event.ctrlKey &&
+      !event.shiftKey &&
+      key === "h"
+    ) {
+      event.preventDefault();
+      hideSelected();
+    }
+
+    if (
+      !event.ctrlKey &&
+      event.shiftKey &&
+      key === "h"
+    ) {
+      event.preventDefault();
+      showAllObjects();
     }
 
     if (
