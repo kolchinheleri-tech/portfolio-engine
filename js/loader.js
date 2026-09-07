@@ -75,6 +75,15 @@ export const masterComposition = [
     z: 0,
     scaleFactor: 1,
     visible: true
+  },
+  {
+    id: "obj-7",
+    file: "/models/006.glb",
+    x: 8,
+    y: 0,
+    z: 0,
+    scaleFactor: 1,
+    visible: true
   }
 ];
 

@@ -8,7 +8,7 @@ export const products = [
     catalogueNumber: "001",
     showLabel: true,
 
-    title: "SOFT BLOCK I",
+    title: "ORANGE BLOCK I",
     type: "UNIQUE OBJECT",
     year: "2026",
 
@@ -69,7 +69,7 @@ export const products = [
     catalogueNumber: "002",
     showLabel: true,
 
-    title: "PINK FORM I",
+    title: "COSMIC COTTON CANDY",
     type: "UNIQUE OBJECT",
     year: "2026",
 
@@ -124,7 +124,7 @@ export const products = [
     catalogueNumber: "003",
     showLabel: true,
 
-    title: "YELLOW FORM I",
+    title: "YELLOW FORM",
     type: "UNIQUE OBJECT",
     year: "2026",
 
@@ -179,7 +179,7 @@ export const products = [
     catalogueNumber: "004",
     showLabel: true,
 
-    title: "GREEN FORM I",
+    title: "GREEN BLOCK I",
     type: "UNIQUE OBJECT",
     year: "2026",
 
@@ -234,7 +234,7 @@ export const products = [
     catalogueNumber: "005",
     showLabel: true,
 
-    title: "PINK FORM II",
+    title: "PINK PIPES",
     type: "UNIQUE OBJECT",
     year: "2026",
 
@@ -264,6 +264,48 @@ export const products = [
       "Unique object"
     ],
 
+    shipping: null,
+
+    viewer: {
+      scale: 1,
+      cameraDistance: 4.3,
+
+      offset: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    },
+
+    media: []
+  },
+
+  {
+    id: "object-006",
+    slug: "object-006",
+
+    modelFile: "/models/006.glb",
+
+    catalogueNumber: "006",
+    showLabel: true,
+
+    title: "WARDROBE I",
+    type: "UNIQUE OBJECT",
+    year: "2026",
+
+    price: null,
+    currency: "EUR",
+
+    availability: "One of a kind",
+    edition: "Unique piece",
+
+    materials: null,
+    dimensions: null,
+
+    shortDescription: null,
+
+    description: [],
+    details: [],
     shipping: null,
 
     viewer: {
