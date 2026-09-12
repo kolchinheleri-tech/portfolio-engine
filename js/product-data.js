@@ -323,6 +323,90 @@ export const products = [
   },
 
   {
+    id: "jelly-garden",
+    slug: "jelly-garden",
+
+    modelFile: "/models/007.glb",
+
+    catalogueNumber: "007",
+    showLabel: true,
+
+    title: "JELLY GARDEN",
+    type: "UNIQUE OBJECT",
+    year: "2026",
+
+    price: null,
+    currency: "EUR",
+
+    availability: "One of a kind",
+    edition: "Unique piece",
+
+    materials: null,
+    dimensions: null,
+
+    shortDescription: null,
+
+    description: [],
+    details: [],
+    shipping: null,
+
+    viewer: {
+      scale: 1,
+      cameraDistance: 4.3,
+
+      offset: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    },
+
+    media: []
+  },
+
+  {
+    id: "red-green-block",
+    slug: "red-green-block",
+
+    modelFile: "/models/008.glb",
+
+    catalogueNumber: "008",
+    showLabel: true,
+
+    title: "RED GREEN BLOCK",
+    type: "UNIQUE OBJECT",
+    year: "2026",
+
+    price: null,
+    currency: "EUR",
+
+    availability: "One of a kind",
+    edition: "Unique piece",
+
+    materials: null,
+    dimensions: null,
+
+    shortDescription: null,
+
+    description: [],
+    details: [],
+    shipping: null,
+
+    viewer: {
+      scale: 1,
+      cameraDistance: 4.3,
+
+      offset: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    },
+
+    media: []
+  },
+
+  {
     id: "rhidancey",
     slug: "rhidancey",
 

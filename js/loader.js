@@ -84,6 +84,24 @@ export const masterComposition = [
     z: 0,
     scaleFactor: 1,
     visible: true
+  },
+  {
+    id: "obj-8",
+    file: "/models/007.glb",
+    x: 10,
+    y: 0,
+    z: 0,
+    scaleFactor: 1,
+    visible: true
+  },
+  {
+    id: "obj-9",
+    file: "/models/008.glb",
+    x: 12,
+    y: 0,
+    z: 0,
+    scaleFactor: 1,
+    visible: true
   }
 ];
 
